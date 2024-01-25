@@ -1,0 +1,10 @@
+{
+    "Name": "Midnight Stardew",
+    "Author": "Midnight Sun",
+    "Version": "0.0.1",
+    "Description": "Creates an object oriented interface for SMAPI",
+    "UniqueID": "midnightsun.stardewoop",
+    "EntryDll": "MidnightStardew.dll",
+    "MinimumApiVersion": "3.0.0",
+    "UpdateKeys": []
+}

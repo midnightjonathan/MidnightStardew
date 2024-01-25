@@ -1,0 +1,8 @@
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.AssemblyInfoInputs.cache
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.AssemblyInfo.cs
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.csproj.CoreCompileInputs.cache
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\bin\Debug\net6.0\MidnightStardew.deps.json
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\bin\Debug\net6.0\MidnightStardew.dll
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.csproj.AssemblyReference.cache
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.dll
