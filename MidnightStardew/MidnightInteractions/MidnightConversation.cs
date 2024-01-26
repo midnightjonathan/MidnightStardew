@@ -38,7 +38,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// If populated, this indicates that the next conversation should be the given key.
         /// </summary>
-        public string NextConversation { get; set; }
+        public MidnightConversation NextConversation { get; set; }
         private string key;
         /// <summary>
         /// The identifier of the conversation.
@@ -63,7 +63,7 @@ namespace MidnightStardew.MidnightInteractions
                                 List<string> statement, 
                                 Dictionary<string, MidnightConversation> responses, 
                                 MidnightDialogueEffects effects, 
-                                string nextConversation,
+                                MidnightConversation nextConversation,
                                 string key)
 
         {
@@ -80,7 +80,7 @@ namespace MidnightStardew.MidnightInteractions
             {
                 this.key = "";
             }
-            NextConversation = nextConversation??"";
+            NextConversation = nextConversation;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         /// <param name="farmer">The farmer for the npc to talk to.</param>
         /// <returns>If the farmer meets the requirements for this conversation.</returns>
-        public bool MeetsRequirements(Farmer farmer)
+        public bool MeetsRequirements()
         {
             if (Speaker == null) throw new ApplicationException("Conversation speaker not set.");
 
@@ -132,8 +132,8 @@ namespace MidnightStardew.MidnightInteractions
             }
             #endregion
 
-            #region Check not extending
-            if (!string.IsNullOrEmpty(Requirements.Extends))
+            #region Check if is extended conversation and player is already in an extended conversation
+            if (NextConversation != null && Speaker.NextConversation != null)
             {
                 return false;
             }
@@ -168,7 +168,7 @@ namespace MidnightStardew.MidnightInteractions
             if (Speaker == null) throw new ApplicationException("Conversation speaker not set");
 
             //Set NextConversation for an extended conversation.
-            if (!string.IsNullOrEmpty(NextConversation))
+            if (NextConversation != null)
             {
                 Speaker.NextConversation = NextConversation;
             }

@@ -6,3 +6,4 @@ C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\bin\Debug\net6.0\Mid
 C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\bin\Debug\net6.0\MidnightStardew.dll
 C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.csproj.AssemblyReference.cache
 C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.dll
+C:\Users\jonyf\source\repos\MidnightStardew\MidnightStardew\obj\Debug\net6.0\MidnightStardew.sourcelink.json

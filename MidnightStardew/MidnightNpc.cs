@@ -87,16 +87,16 @@ namespace MidnightStardew
         /// Check if the player has had an extended conversation today.
         /// </summary>
         public bool HadExtendedConversationToday { get; set; } = false;
-        private string? nextConversation;
+        private MidnightConversation? nextConversation;
         /// <summary>
         /// If filled out indicates that the NPC is in an extended conversation with the farmer.
         /// </summary>
-        public string? NextConversation 
+        public MidnightConversation? NextConversation 
         {
             get => nextConversation;
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (value != null)
                 {
                     HadExtendedConversationToday = true;
                     nextConversation = value;
@@ -193,14 +193,14 @@ namespace MidnightStardew
             if (NextConversation != null && !HadExtendedConversationToday)
             {
                 HadExtendedConversationToday = true;
-                return MidnightConversation.Get[NextConversation];
+                return NextConversation;
             }
 
             List<MidnightConversation> available = new();
 
             foreach (var conversation in  Conversations)
             {
-                if (conversation.MeetsRequirements(MidnightFarmer.LocalFarmer))
+                if (conversation.MeetsRequirements())
                 {
                     available.Add(conversation);
                 }

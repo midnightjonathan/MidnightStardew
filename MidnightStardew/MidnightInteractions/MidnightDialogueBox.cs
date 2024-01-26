@@ -148,7 +148,7 @@ namespace MidnightStardew.MidnightInteractions
 
             foreach (var conversation in Conversation.Responses)
             {
-                if (conversation.Value.MeetsRequirements(MidnightFarmer.LocalFarmer))
+                if (conversation.Value.MeetsRequirements())
                 {
                     available[conversation.Key] = conversation.Value;
                 }

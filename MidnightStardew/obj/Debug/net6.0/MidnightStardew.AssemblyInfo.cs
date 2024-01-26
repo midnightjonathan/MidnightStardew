@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MidnightStardew")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f73bbebd40b044f831dd54c773de46761fb87de")]
 [assembly: System.Reflection.AssemblyProductAttribute("MidnightStardew")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MidnightStardew")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
