@@ -17,7 +17,30 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// All keyed Conversations.
         /// </summary>
-        public static Dictionary<string, MidnightConversation> Get = new();
+        public static Dictionary<string, MidnightConversation> Get { get; } = new();
+        /// <summary>
+        /// Tries to get a conversation with the given key.
+        /// </summary>
+        /// <param name="speaker">The MidnightNpc who is speaking.</param>
+        /// <param name="key">The key of the conversation to look for.</param>
+        /// <param name="conversation">The conversation with the given key.</param>
+        /// <returns>True if the conversation exists.</returns>
+        public static bool TryGetConversation(MidnightNpc speaker, string key, out MidnightConversation? conversation)
+        {
+            return Get.TryGetValue($"{speaker.Name}_{key}", out conversation);
+        }
+        /// <summary>
+        /// Adds a conversation to the keyed conversations.
+        /// </summary>
+        /// <param name="speaker">The Midnight NPC who is speaking.</param>
+        /// <param name="conversation">The conversation to add.</param>
+        private static void AddConversation(MidnightNpc speaker, MidnightConversation conversation)
+        {
+            if (!string.IsNullOrEmpty(conversation.key))
+            {
+                Get[$"{speaker.Name}_{conversation.key}"] = conversation;
+            }
+        }
 
         /// <summary>
         /// List of statements that the NPC will say to the player.I Thats 
@@ -53,33 +76,42 @@ namespace MidnightStardew.MidnightInteractions
             set => key = value;
         }
 
+        private MidnightNpc? speaker;
         /// <summary>
         /// The default Midnight NPC that is speaking during the conversation.
         /// </summary>
-        public MidnightNpc? Speaker { get; set; }
+        public MidnightNpc? Speaker 
+        {
+            get => speaker;
+            set
+            {
+                if (speaker != null)
+                {
+                    throw new ApplicationException("Speaker has already been set.");
+                } else if (value == null)
+                {
+                    throw new ApplicationException("Speaker can not have null assigned to it.");
+                }
+
+                speaker = value;
+                AddConversation(speaker, this);
+            }
+        }
 
         [JsonConstructor]
         public MidnightConversation(MidnightDialogueRequirements reqs, 
-                                List<string> statement, 
-                                Dictionary<string, MidnightConversation> responses, 
-                                MidnightDialogueEffects effects, 
-                                MidnightConversation nextConversation,
-                                string key)
+                                    List<string> statement, 
+                                    Dictionary<string, MidnightConversation> responses, 
+                                    MidnightDialogueEffects effects, 
+                                    MidnightConversation nextConversation,
+                                    string key)
 
         {
             Requirements = reqs;
             Statement = statement;
             Responses = responses;
             Effects = effects;
-            if (key != null)
-            {
-                Get[key] = this;
-                this.key = key;
-            }
-            else
-            {
-                this.key = "";
-            }
+            this.key = key ?? "";
             NextConversation = nextConversation;
         }
 

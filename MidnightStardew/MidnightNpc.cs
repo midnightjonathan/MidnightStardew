@@ -113,6 +113,19 @@ namespace MidnightStardew
         /// The set of all conversations the player has had with the NPC.
         /// </summary>
         public HashSet<string> ExperiencedConverastions { get; } = new();
+
+        private bool hasIntroduced = false;
+        public bool HasIntroduced
+        {
+            get
+            {
+                if (!hasIntroduced)
+                {
+                    hasIntroduced = ExperiencedConverastions.Contains("Introduction");
+                }
+                return hasIntroduced;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -190,6 +203,11 @@ namespace MidnightStardew
         /// <returns>A valid dialogue.</returns>
         public MidnightConversation ChooseDialogue()
         {
+            if (!HasIntroduced && MidnightConversation.TryGetConversation(this, "Introduction", out MidnightConversation? introConversation))
+            {
+                return introConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
+            }
+
             if (NextConversation != null && !HadExtendedConversationToday)
             {
                 HadExtendedConversationToday = true;
