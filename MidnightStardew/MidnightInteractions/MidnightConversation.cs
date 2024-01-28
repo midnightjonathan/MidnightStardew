@@ -171,6 +171,13 @@ namespace MidnightStardew.MidnightInteractions
             }
             #endregion
 
+            #region Check location
+            if (Speaker.StardewNpc.currentLocation.Name != (Requirements.Location ?? ""))
+            {
+                return false;
+            }
+            #endregion
+
             return true;
         }
 
