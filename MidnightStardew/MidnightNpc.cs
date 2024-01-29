@@ -30,6 +30,7 @@ namespace MidnightStardew
         /// <summary>
         /// A dictionary to get all of the MidnightNpcs in the game based on their name.
         /// </summary>
+        [JsonIgnore]
         public static Dictionary<string, MidnightNpc> Get { get; } = new();
 
         protected Random dailyRandom = new();
@@ -37,11 +38,13 @@ namespace MidnightStardew
         /// <summary>
         /// The underlying Stardew NPC that the MidnightNpc wraps.
         /// </summary>
+        [JsonIgnore]
         public NPC StardewNpc { get; private set; }
 
         /// <summary>
         /// The friendship the local farmer has with the Stardew NPC.
         /// </summary>
+        [JsonIgnore]
         public int Hearts
         {
             get
@@ -53,6 +56,7 @@ namespace MidnightStardew
         /// <summary>
         /// The friendship points that the Stardew NPC has with the local farmer.
         /// </summary>
+        [JsonIgnore]
         public int FriendshipPoints
         {
             get
@@ -76,21 +80,24 @@ namespace MidnightStardew
         /// <summary>
         /// Custom stats for your mod.
         /// </summary>
-        public Dictionary<string, MidnightStats> Stats { get; } = new();
+        public Dictionary<string, MidnightStats> Stats { get; protected set; } = new();
 
         /// <summary>
         /// List of all conversations the NPC has.
         /// </summary>
+        [JsonIgnore]
         public List<MidnightConversation> Conversations { get; set; }
 
         /// <summary>
         /// Check if the player has had an extended conversation today.
         /// </summary>
+        [JsonIgnore]
         public bool HadExtendedConversationToday { get; set; } = false;
         private MidnightConversation? nextConversation;
         /// <summary>
         /// If filled out indicates that the NPC is in an extended conversation with the farmer.
         /// </summary>
+        [JsonIgnore]
         public MidnightConversation? NextConversation 
         {
             get => nextConversation;
@@ -107,12 +114,13 @@ namespace MidnightStardew
         /// <summary>
         /// List of locations the player has spoken to the NPC today.
         /// </summary>
+        [JsonIgnore]
         public List<GameLocation> SpokenToLocations { get; } = new();
 
         /// <summary>
         /// The set of all conversations the player has had with the NPC.
         /// </summary>
-        public HashSet<string> ExperiencedConverastions { get; } = new();
+        public HashSet<string> ExperiencedConverastions { get; protected set; } = new();
 
         private bool hasIntroduced = false;
         public bool HasIntroduced
@@ -155,11 +163,31 @@ namespace MidnightStardew
             eventMonitor.ModHelper.Events.World.NpcListChanged += OnLocationChange;
             eventMonitor.ModHelper.Events.Player.Warped += OnLocationChange;
             eventMonitor.ModHelper.Events.GameLoop.DayStarted += OnDayStart;
+            eventMonitor.ModHelper.Events.GameLoop.Saving += OnSaving;
 
             //Setup the speaker for all of this NPCs conversations.
             foreach (var conversation in Conversations )
             {
                 conversation.SetSpeaker(this);
+            }
+
+            LoadNpc();
+        }
+
+        /// <summary>
+        /// Loads the MidnightNpc data if it exists. Only works for the main player currently.
+        /// </summary>
+        /// <exception cref="ApplicationException">Will throw if the EventMenitor is not properly setup.</exception>
+        private void LoadNpc()
+        {
+            var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
+
+            var npcSave = eventMonitor.ModHelper.Data.ReadSaveData<MidnightNpcSave>($"{Name}.save");
+            if ( npcSave != null )
+            {
+                Stats = npcSave.Stats;
+                ExperiencedConverastions = npcSave.ExperiencedConverastions;
+                hasIntroduced = npcSave.HasIntroduced;
             }
         }
 
@@ -252,6 +280,31 @@ namespace MidnightStardew
         #endregion
 
         #region EventHandling
+        protected virtual bool IsMouseOver()
+        {
+            if (Game1.currentLocation != StardewNpc.currentLocation || !CanTalk()) return false;
+
+            var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("EventMonitor not set up.");
+
+            var pos = eventMonitor.ModHelper.Input.GetCursorPosition().GetScaledAbsolutePixels();
+
+            var spriteArea = new Rectangle((int)StardewNpc.position.X,
+                                           (int)StardewNpc.position.Y - StardewNpc.Sprite.SpriteWidth * 4,
+                                           StardewNpc.Sprite.SpriteWidth * 4,
+                                           StardewNpc.Sprite.SpriteHeight * 4);
+
+            return spriteArea.Contains(pos.X, pos.Y);
+        }
+
+        private void OnButtonPressed(object? sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        {
+            if (e.Button == SButton.MouseRight && IsMouseOver() && StardewNpc.withinPlayerThreshold(1) && CanTalk())
+            {
+                DisplayDialogue();
+                SpokenToLocations.Add(StardewNpc.currentLocation);
+            }
+        }
+
         private void OnDayStart(object? sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             Utility.CreateDaySaveRandom(StardewNpc.id);
@@ -275,29 +328,11 @@ namespace MidnightStardew
             }
         }
 
-        protected virtual bool IsMouseOver()
+        private void OnSaving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
         {
-            if (Game1.currentLocation != StardewNpc.currentLocation || !CanTalk()) return false;
-
-            var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("EventMonitor not set up.");
-            
-            var pos = eventMonitor.ModHelper.Input.GetCursorPosition().GetScaledAbsolutePixels();
-            
-            var spriteArea = new Rectangle((int)StardewNpc.position.X,
-                                           (int)StardewNpc.position.Y - StardewNpc.Sprite.SpriteWidth * 4,
-                                           StardewNpc.Sprite.SpriteWidth * 4,
-                                           StardewNpc.Sprite.SpriteHeight * 4);
-
-            return spriteArea.Contains(pos.X, pos.Y);
-        }
-
-        private void OnButtonPressed(object? sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
-        {
-            if (e.Button == SButton.MouseRight && IsMouseOver() && StardewNpc.withinPlayerThreshold(1) && CanTalk())
-            {
-                DisplayDialogue();
-                SpokenToLocations.Add(StardewNpc.currentLocation);
-            }
+            var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
+            var saveData = new MidnightNpcSave(this);
+            eventMonitor.ModHelper.Data.WriteSaveData($"{Name}.save", saveData);
         }
 
         protected virtual void OnTick(object? sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
