@@ -154,6 +154,20 @@ namespace MidnightStardew.MidnightInteractions
             }
             #endregion
 
+            #region Check other NPC stats
+            foreach (var otherStat in Requirements.OtherStats)
+            {
+                var npc = MidnightNpc.Get[otherStat.Key];
+                foreach (var stat in otherStat.Value)
+                {
+                    var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
+                    var npcStat = npc.GetStatLevel(id, stat.Key);
+
+                    if (!CheckInRange(npcStat, stat.Value)) return false;
+                }
+            }
+            #endregion
+
             #region Check Required key
             foreach (var reqKey in Requirements.Keys ?? new())
             {
@@ -172,7 +186,7 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check location
-            if (Speaker.StardewNpc.currentLocation.Name != (Requirements.Location ?? ""))
+            if (Requirements.Location != null && Speaker.StardewNpc.currentLocation.Name != Requirements.Location)
             {
                 return false;
             }
@@ -245,12 +259,15 @@ namespace MidnightStardew.MidnightInteractions
         {
             Speaker = npc;
 
-            if (Responses == null) return;
-            
-            foreach (var conversation in Responses.Values)
+            if (Responses != null)
             {
-                conversation.SetSpeaker(Speaker);
+                foreach (var conversation in Responses.Values)
+                {
+                    conversation.SetSpeaker(Speaker);
+                }
             }
+
+            NextConversation?.SetSpeaker(Speaker);
         }
     }
 }

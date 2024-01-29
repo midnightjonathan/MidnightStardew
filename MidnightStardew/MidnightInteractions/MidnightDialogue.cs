@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StardewValley;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,16 @@ namespace MidnightStardew.MidnightInteractions
 {
     public class MidnightDialogue : StardewValley.Dialogue
     {
+        public readonly static Dictionary<string, string> StandardImageMap = new()
+        {
+            { "neutral", "0" },
+            { "happy", "1" },
+            { "sad", "2" },
+            { "unique", "3" },
+            { "love", "4" },
+            { "angry", "5" }
+        };
+
         /// <summary>
         /// The conversation for this dialogue.
         /// </summary>
@@ -15,7 +26,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// The current statement being displayed.
         /// </summary>
-        public string CurrentStatement => Conversation.Statement[StatementIndex];
+        public string CurrentStatement => Parse(Conversation.Statement[StatementIndex]);
         /// <summary>
         /// Returns true if the statement index is the final statement of the dialogue.
         /// </summary>
@@ -27,7 +38,7 @@ namespace MidnightStardew.MidnightInteractions
         {
             get
             {
-                return Conversation.Statement[++StatementIndex];
+                return Parse(Conversation.Statement[++StatementIndex]);
             }
         }
         /// <summary>
@@ -36,7 +47,7 @@ namespace MidnightStardew.MidnightInteractions
         public int StatementIndex { get; set; } = 0;
 
         public MidnightDialogue(StardewValley.NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
-            : base(speaker, default, currentConversation.Statement[isQuestion ? currentConversation.Statement.Count - 1: 0])
+            : base(speaker, default, currentConversation.Statement[isQuestion ? currentConversation.Statement.Count - 1 : 0])
         {
             Conversation = currentConversation;
             showPortrait = true;
@@ -46,6 +57,29 @@ namespace MidnightStardew.MidnightInteractions
             }
         }
 
+        protected virtual string Parse(string statement)
+        {
+            var parsedStatment = statement.Replace("[Farmer]", MidnightFarmer.LocalFarmer.Name);
 
+            // Set emotion
+            int emoteIndex = parsedStatment.IndexOf("[Image ");
+            if (emoteIndex != -1)
+            {
+                int startEmote = emoteIndex + 7;
+                int endEmote = parsedStatment.IndexOf("]", startEmote);
+                var emote = parsedStatment.Substring(startEmote, endEmote - startEmote);
+                StandardImageMap.TryGetValue(emote, out string? outEmote);
+                CurrentEmotion = $"${outEmote ?? emote}";
+                parsedStatment = parsedStatment.Remove(emoteIndex, endEmote - emoteIndex + 1);
+            }
+
+            return parsedStatment;
+        }
+
+        protected override void parseDialogueString(string statement, string translationKey = "")
+        {
+            dialogues.Clear();
+            dialogues.Add(Parse(statement));
+        }
     }
 }

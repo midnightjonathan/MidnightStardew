@@ -211,7 +211,9 @@ namespace MidnightStardew
             if (NextConversation != null && !HadExtendedConversationToday)
             {
                 HadExtendedConversationToday = true;
-                return NextConversation;
+                var returnConversation = NextConversation;
+                NextConversation = null;
+                return returnConversation;
             }
 
             List<MidnightConversation> available = new();
@@ -224,7 +226,15 @@ namespace MidnightStardew
                 }
             }
 
-            return available[dailyRandom.Next(available.Count)];
+            if (available.Count > 0)
+            {
+                return available[dailyRandom.Next(available.Count)];
+            }
+            else
+            {
+                throw new ApplicationException("No available conversations.");
+            }
+            
         }
         #endregion
 

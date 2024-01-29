@@ -63,7 +63,7 @@ namespace MidnightStardew.MidnightInteractions
             x = (int)Utility.getTopLeftPositionForCenteringOnScreen(width, height).X;
             y = Game1.uiViewport.Height - height - 64;
 
-            friendshipJewel = new Rectangle(x + width - 64, y + 256, 44, 44); //friendship jewel is not being added
+            friendshipJewel = new Rectangle(x + width - 64, y + 256, 44, 44); // Not sure if this is needed
 
             setUpForGamePadMode();
         }
