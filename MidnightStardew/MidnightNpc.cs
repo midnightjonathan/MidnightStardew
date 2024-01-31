@@ -139,6 +139,25 @@ namespace MidnightStardew
         /// <summary>
         /// Creates a new MidnightNpc.
         /// </summary>
+        /// <param name="filePath">The path to the character json.</param>
+        public static void Create(string filePath)
+        {
+            var characterJson = File.ReadAllText(filePath);
+            var character = JsonConvert.DeserializeObject<MidnightNpc>(characterJson)
+                ?? throw new ApplicationException($"Failed to deserialize character json at {filePath}");
+            if (Get.TryGetValue(character.Name, out MidnightNpc npc))
+            {
+                npc.Conversations.AddRange(character.Conversations);
+            }
+            else
+            {
+                Get[character.Name] = character;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new MidnightNpc of the provided child class.
+        /// </summary>
         /// <typeparam name="T">A child class of MidnightNpc to create.</typeparam>
         /// <param name="filePath">The path to the character json.</param>
         public static void Create<T>(string filePath) where T : MidnightNpc
