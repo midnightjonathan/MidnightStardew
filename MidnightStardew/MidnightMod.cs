@@ -44,11 +44,6 @@ namespace MidnightStardew
         /// <param name="e">Always null</param>
         private void Game_LoadStageChanged(object? sender, StardewModdingAPI.Events.LoadStageChangedEventArgs e)
         {
-            if (e.NewStage == LoadStage.SaveLoadedBasicInfo)
-            {
-                
-            }
-
             if (e.NewStage == LoadStage.Ready)
             {
                 GameLoaded?.Invoke(this, e);
