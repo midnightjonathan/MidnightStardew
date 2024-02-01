@@ -32,10 +32,12 @@ namespace MidnightStardew
         /// <summary>
         /// Called when the mod is loaded.
         /// </summary>
-        public virtual void Start()
-        {
+        protected abstract void Start();
 
-        }
+        /// <summary>
+        /// Loads the Npcs when the game is loaded from a save.
+        /// </summary>
+        protected abstract void LoadNpcs();
 
         /// <summary>
         /// Called when the stage of game loading changes as a game is loaded.
@@ -50,7 +52,5 @@ namespace MidnightStardew
                 LoadNpcs();
             }
         }
-
-        protected abstract void LoadNpcs();
     }
 }
