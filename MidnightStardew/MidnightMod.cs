@@ -9,7 +9,7 @@ using System;
 
 namespace MidnightStardew
 {
-    public class MidnightMod : Mod
+    public abstract class MidnightMod : Mod
     {
         public delegate void GameLoadedDelegate(object sender, EventArgs e);
         public event GameLoadedDelegate? GameLoaded;
@@ -51,6 +51,6 @@ namespace MidnightStardew
             }
         }
 
-        protected virtual void LoadNpcs() { }
+        protected abstract void LoadNpcs();
     }
 }
