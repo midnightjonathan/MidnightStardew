@@ -271,7 +271,7 @@ namespace MidnightStardew
         /// <returns>A valid dialogue.</returns>
         public MidnightConversation ChooseDialogue()
         {
-            if (!HasIntroduced && MidnightConversation.TryGetConversation(this, "Introduction", out MidnightConversation? introConversation))
+            if (!HasIntroduced && MidnightConversation.TryGetConversation(this, "introduction", out MidnightConversation? introConversation))
             {
                 return introConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
             }
