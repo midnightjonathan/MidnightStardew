@@ -136,7 +136,7 @@ namespace MidnightStardew.MidnightInteractions
             #region Check calendar reqs
             if (!(Requirements.Days?.Contains(SDate.Now().DayOfWeek.ToString()) ?? true) ||
                 CheckOutRange(Game1.year, Requirements.Year) ||
-                CheckStringNoMatch(Requirements.Season, Game1.currentSeason))
+                CheckOutList(Requirements.Season, Game1.currentSeason))
             {
                 return false;
             }
@@ -147,7 +147,7 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check NPC stats
-            foreach (var stat in Requirements.Stats)
+            foreach (var stat in Requirements?.Stats ?? new())
             {
                 var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
                 var npcStat = Speaker.GetStatLevel(id, stat.Key);
@@ -157,7 +157,7 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check other NPC stats
-            foreach (var otherStat in Requirements.OtherStats)
+            foreach (var otherStat in Requirements?.OtherStats ?? new())
             {
                 var npc = MidnightNpc.Get[otherStat.Key];
                 foreach (var stat in otherStat.Value)
@@ -171,7 +171,7 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check keys
-            foreach (var reqKey in Requirements.Keys ?? new())
+            foreach (var reqKey in Requirements?.Keys ?? new())
             {
                 if (!Speaker.ExperiencedConverastions.Contains(reqKey))
                 {
@@ -179,7 +179,7 @@ namespace MidnightStardew.MidnightInteractions
                 }
             }
 
-            foreach (var missingKey in Requirements.MissingKeys ?? new())
+            foreach (var missingKey in Requirements?.MissingKeys ?? new())
             {
                 if (Speaker.ExperiencedConverastions.Contains(missingKey))
                 {
@@ -196,7 +196,7 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check location
-            if (CheckStringNoMatch(Requirements.Location,  Speaker.StardewNpc.currentLocation.Name))
+            if (CheckStringNoMatch(Requirements?.Location,  Speaker.StardewNpc.currentLocation.Name))
             {
                 return false;
             }
@@ -211,7 +211,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="reqList">The requirement list.</param>
         /// <param name="stateString">The state of the world to check.</param>
         /// <returns>True if the requirements is null or the state is in the list.</returns>
-        private static bool CheckInList(IEnumerable<string> reqList, string stateString)
+        private static bool CheckInList(IEnumerable<string>? reqList, string stateString)
         {
             return reqList == null || !reqList.Any() || reqList.Contains(stateString);
         }
@@ -222,7 +222,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="reqList">The requirement list.</param>
         /// <param name="stateString">The state of the world to check.</param>
         /// <returns>True if the requirements is not null and the state is not in the list.</returns>
-        private static bool CheckOutList(IEnumerable<string> reqList, string stateString)
+        private static bool CheckOutList(IEnumerable<string>? reqList, string stateString)
         {
             return !CheckInList(reqList, stateString);
         }
@@ -233,7 +233,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="requirementString">The requirement to be met.</param>
         /// <param name="stateString">The string that represents game state.</param>
         /// <returns>True if the requirement string is null or matches the state string.</returns>
-        private static bool CheckStringMatch(string requirementString, string stateString)
+        private static bool CheckStringMatch(string? requirementString, string stateString)
         {
             return requirementString == null || requirementString.ToLower() == stateString.ToLower();
         }
@@ -244,7 +244,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="requirementString">The requirement to be met.</param>
         /// <param name="stateString">The string that represents game state.</param>
         /// <returns>True if the requirement string is not null and doesn't matches the state string.</returns>
-        private static bool CheckStringNoMatch(string requirementString, string stateString)
+        private static bool CheckStringNoMatch(string? requirementString, string stateString)
         {
             return !(CheckStringMatch(requirementString, stateString));
         }
@@ -255,7 +255,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="value">The value to check.</param>
         /// <param name="range">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
         /// <returns>True if value is greater than or equal to the first number and less than or equal to the second number.</returns>
-        private static bool CheckInRange(int value, string range)
+        private static bool CheckInRange(int value, string? range)
         {
             if (range == null) return true;
 
@@ -272,7 +272,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <param name="value">The value to check.</param>
         /// <param name="range">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
         /// <returns>True if value is less than the first number and greater than the second number.</returns>
-        private static bool CheckOutRange(int value, string range)
+        private static bool CheckOutRange(int value, string? range)
         {
             return !CheckInRange(value, range);
         }

@@ -13,7 +13,7 @@ namespace MidnightStardew.MidnightInteractions
     {
         public List<string>? Days { get; set; }
         public string? Year { get; set; }
-        public string? Season { get; set; }
+        public List<string>? Season { get; set; }
         public string? Hearts { get; set; }
         public List<string>? Keys { get; set; }
         public string? Location { get; set; }
@@ -28,7 +28,7 @@ namespace MidnightStardew.MidnightInteractions
                                             List<string> keys, 
                                             List<string> missingKeys,
                                             string year,
-                                            string season,
+                                            List<string> season,
                                             string hearts, 
                                             string location)
         {
@@ -38,7 +38,14 @@ namespace MidnightStardew.MidnightInteractions
             Keys = keys;
             MissingKeys = missingKeys;
             Year = year;
-            Season = season?.ToLower();
+            if (season != null)
+            {
+                Season = new();
+                foreach (var seasonName in season)
+                {
+                    Season.Add(seasonName.ToLower());
+                }
+            }
             Hearts = hearts;
             Location = location?.ToLower();
         }
