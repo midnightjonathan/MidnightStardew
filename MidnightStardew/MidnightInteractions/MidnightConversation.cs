@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -111,7 +112,7 @@ namespace MidnightStardew.MidnightInteractions
             Statement = statement;
             Responses = responses;
             Effects = effects;
-            this.key = key ?? "";
+            this.key = key?.ToLower() ?? "";
             NextConversation = nextConversation;
         }
 
@@ -133,30 +134,44 @@ namespace MidnightStardew.MidnightInteractions
 
             if (Requirements == null) return true;
 
-            #region Check calendar reqs
-            if (!(Requirements.Days?.Contains(SDate.Now().DayOfWeek.ToString()) ?? true) ||
-                CheckOutRange(Game1.year, Requirements.Year) ||
-                CheckOutList(Requirements.Season, Game1.currentSeason))
+            #region Check location information
+            var location = Speaker.StardewNpc.currentLocation;
+            if (CheckStringNoMatch(Requirements?.Location, location.Name) || //Location itself
+                CheckStringNoMatch(Requirements?.Weather, location.GetWeather().Weather)) //Location weather
+            {
+                return false;
+            }
+
+            if (Requirements?.Spot != null &&
+                !MidnightSpot.Get[Requirements.Spot].IsIn(Speaker))
             {
                 return false;
             }
             #endregion
 
-            #region Check NPC hearts
-            if (CheckOutRange(Speaker.Hearts, Requirements.Hearts)) return false;
+            #region Check calendar reqs
+            if (CheckOutRange(Requirements.Time, Game1.timeOfDay) ||
+                CheckOutList(Requirements.Days, SDate.Now().DayOfWeek.ToString()) ||
+                CheckOutList(Requirements.Season, Game1.currentSeason) ||
+                CheckOutRange(Requirements.Year, Game1.year))
+            {
+                return false;
+            }
             #endregion
 
-            #region Check NPC stats
+            #region Check NPC Relationship
+            if (CheckOutRange(Requirements.Hearts, Speaker.Hearts)) return false;
             foreach (var stat in Requirements?.Stats ?? new())
             {
                 var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
                 var npcStat = Speaker.GetStatLevel(id, stat.Key);
 
-                if (CheckOutRange(npcStat, stat.Value)) return false;
+                if (CheckOutRange(stat.Value, npcStat)) return false;
             }
+            if (CheckOutList(Requirements?.RelationshipStatus, Speaker.RelationshipStatus)) return false;
             #endregion
 
-            #region Check other NPC stats
+            #region Check other NPC Relationship
             foreach (var otherStat in Requirements?.OtherStats ?? new())
             {
                 var npc = MidnightNpc.Get[otherStat.Key];
@@ -165,7 +180,7 @@ namespace MidnightStardew.MidnightInteractions
                     var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
                     var npcStat = npc.GetStatLevel(id, stat.Key);
 
-                    if (CheckOutRange(npcStat, stat.Value)) return false;
+                    if (CheckOutRange(stat.Value, npcStat)) return false;
                 }
             }
             #endregion
@@ -194,14 +209,7 @@ namespace MidnightStardew.MidnightInteractions
                 return false;
             }
             #endregion
-
-            #region Check location
-            if (CheckStringNoMatch(Requirements?.Location,  Speaker.StardewNpc.currentLocation.Name))
-            {
-                return false;
-            }
-            #endregion
-
+            
             return true;
         }
 
@@ -213,7 +221,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <returns>True if the requirements is null or the state is in the list.</returns>
         private static bool CheckInList(IEnumerable<string>? reqList, string stateString)
         {
-            return reqList == null || !reqList.Any() || reqList.Contains(stateString);
+            return reqList == null || !reqList.Any() || reqList.Contains(stateString.ToLower());
         }
 
         /// <summary>
@@ -253,13 +261,13 @@ namespace MidnightStardew.MidnightInteractions
         /// Checks if a value is within a string range.
         /// </summary>
         /// <param name="value">The value to check.</param>
-        /// <param name="range">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
+        /// <param name="reqRange">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
         /// <returns>True if value is greater than or equal to the first number and less than or equal to the second number.</returns>
-        private static bool CheckInRange(int value, string? range)
+        private static bool CheckInRange(string? reqRange, int value)
         {
-            if (range == null) return true;
+            if (reqRange == null) return true;
 
-            var rangeArray = range.Split('-', StringSplitOptions.RemoveEmptyEntries);
+            var rangeArray = reqRange.Split('-', StringSplitOptions.RemoveEmptyEntries);
             var min = int.Parse(rangeArray[0]);
             var max = rangeArray.Length > 1 ? int.Parse(rangeArray[1]) : int.MaxValue;
 
@@ -269,12 +277,12 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// Checks if a value is outside of a string range.
         /// </summary>
+        /// <param name="reqRange">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
         /// <param name="value">The value to check.</param>
-        /// <param name="range">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
         /// <returns>True if value is less than the first number and greater than the second number.</returns>
-        private static bool CheckOutRange(int value, string? range)
+        private static bool CheckOutRange(string? reqRange, int value)
         {
-            return !CheckInRange(value, range);
+            return !CheckInRange(reqRange, value);
         }
 
         /// <summary>

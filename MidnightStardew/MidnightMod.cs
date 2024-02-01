@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MidnightStardew.MidnightWorld;
+using Newtonsoft.Json;
 using StardewHappyEndings;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
@@ -37,7 +38,26 @@ namespace MidnightStardew
         /// <summary>
         /// Loads the Npcs when the game is loaded from a save.
         /// </summary>
-        protected abstract void LoadNpcs();
+        protected virtual void LoadNpcs() { }
+
+        /// <summary>
+        /// Loads named spots within locations that can be used to check requirements.
+        /// </summary>
+        protected virtual void LoadSpots() { }
+
+        /// <summary>
+        /// Loads built in Midnight Stardew spots.
+        /// </summary>
+        /// <exception cref="ApplicationException">Thrown if the Spots.json is empty.</exception>
+        private void LoadMidnightSpots()
+        {
+            var spotFile = Path.Combine(Helper.DirectoryPath, "MidnightSpots", "Spots.json");
+
+            var spotJson = File.ReadAllText(spotFile);
+            var spots = JsonConvert.DeserializeObject<Dictionary<string, MidnightSpot>>(spotJson) ?? throw new ApplicationException("No spots loaded.");
+            MidnightSpot.Get = spots;
+            LoadSpots();
+        }
 
         /// <summary>
         /// Called when the stage of game loading changes as a game is loaded.
@@ -47,9 +67,10 @@ namespace MidnightStardew
         private void Game_LoadStageChanged(object? sender, StardewModdingAPI.Events.LoadStageChangedEventArgs e)
         {
             if (e.NewStage == LoadStage.Ready)
-            {
+            { 
                 GameLoaded?.Invoke(this, e);
                 LoadNpcs();
+                LoadMidnightSpots();
             }
         }
     }

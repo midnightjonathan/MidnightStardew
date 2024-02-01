@@ -18,8 +18,12 @@ namespace MidnightStardew.MidnightInteractions
         public List<string>? Keys { get; set; }
         public string? Location { get; set; }
         public List<string>? MissingKeys { get; set; }
+        public List<string>? RelationshipStatus { get; set; }
         public Dictionary<string, string>? Stats { get; set; }
         public Dictionary<string, Dictionary<string, string>>? OtherStats { get; set; }
+        public string? Weather { get; set; }
+        public string? Time { get; set; }
+        public string? Spot { get; set; }
 
         [JsonConstructor]
         public MidnightDialogueRequirements(Dictionary<string, string> stats, 
@@ -27,27 +31,42 @@ namespace MidnightStardew.MidnightInteractions
                                             List<string> days, 
                                             List<string> keys, 
                                             List<string> missingKeys,
-                                            string year,
+                                            List<string> relationshipStatus,
                                             List<string> season,
+                                            string spot,
+                                            string time,
+                                            string weather,
+                                            string year,
                                             string hearts, 
                                             string location)
         {
             Stats = stats;
             OtherStats = otherStats;
-            Days = days;
-            Keys = keys;
-            MissingKeys = missingKeys;
+            
+            Days = ListToLower(days);
+            Keys = ListToLower(keys);
+            MissingKeys = ListToLower(missingKeys);
+            Season = ListToLower(season);
+            RelationshipStatus = ListToLower(relationshipStatus);
+
+            Spot = spot;
             Year = year;
-            if (season != null)
-            {
-                Season = new();
-                foreach (var seasonName in season)
-                {
-                    Season.Add(seasonName.ToLower());
-                }
-            }
+            Time = time;
             Hearts = hearts;
             Location = location?.ToLower();
+            Weather = weather?.ToLower();
+        }
+
+        private static List<string>? ListToLower(List<string> listToLower)
+        {
+            if (listToLower == null) return null;
+
+            var list = new List<string>();
+            foreach (var item in listToLower)
+            {
+                list.Add(item.ToLower());
+            }
+            return list;
         }
     }
 }

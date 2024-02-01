@@ -1,0 +1,24 @@
+{
+    "SebastianBed": {
+        "LocationName": "SebastianRoom",
+        "Rects": [
+            {
+                "x": 10,
+                "y": 9,
+                "width": 2,
+                "height": 2
+            }
+        ]
+    },
+    "SebastianRoom": {
+        "LocationName": "SebastianRoom",
+        "Rects": [
+            {
+                "x": 1,
+                "y": 4,
+                "width": 10,
+                "height": 7
+            }
+        ]
+    }
+}

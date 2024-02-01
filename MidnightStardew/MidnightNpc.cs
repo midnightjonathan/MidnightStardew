@@ -72,6 +72,19 @@ namespace MidnightStardew
         }
 
         /// <summary>
+        /// The descriptor of the location player's relationship with this NPC.
+        /// Possible values: friendly, dating, engaged, married, divorced
+        /// </summary>
+        public string RelationshipStatus
+        {
+            get
+            {
+                MidnightFarmer.LocalFarmer.friendshipData.TryGetValue(Name, out Friendship friendship);
+                return friendship?.Status.ToString().ToLower() ?? "stranger";
+            }
+        }
+
+        /// <summary>
         /// The name of the NPC.
         /// </summary>
         public string Name { get; }
@@ -145,7 +158,7 @@ namespace MidnightStardew
             var characterJson = File.ReadAllText(filePath);
             var character = JsonConvert.DeserializeObject<MidnightNpc>(characterJson)
                 ?? throw new ApplicationException($"Failed to deserialize character json at {filePath}");
-            if (Get.TryGetValue(character.Name, out MidnightNpc npc))
+            if (Get.TryGetValue(character.Name, out MidnightNpc? npc))
             {
                 npc.Conversations.AddRange(character.Conversations);
             }
@@ -191,6 +204,14 @@ namespace MidnightStardew
             }
 
             LoadNpc();
+            StardewNpc.DefaultPosition = new Vector2(3, 4);
+            foreach (var home in Game1.characterData[Name].Home)
+            {
+                if (home.Condition == null)
+                {
+                    home.Tile = new Point(3, 4);
+                }
+            }
         }
 
         /// <summary>
