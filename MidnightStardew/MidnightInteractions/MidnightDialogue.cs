@@ -30,7 +30,15 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// Returns true if the statement index is the final statement of the dialogue.
         /// </summary>
-        public bool IsFinished => Conversation.Responses == null ? StatementIndex == Conversation.Statement.Count - 1 : StatementIndex == Conversation.Statement.Count - 2;
+        public bool IsFinished => StatementIndex == LastStatementIndex;
+        /// <summary>
+        /// Returns the last statement index of the conversation.
+        /// </summary>
+        public int LastStatementIndex => Conversation.Responses == null ? Conversation.Statement.Count - 1 : Conversation.Statement.Count - 2;
+        /// <summary>
+        /// The last index of the conversation, regardless of it being a question or not.
+        /// </summary>
+        public int LastIndex => Conversation.Statement.Count - 1;
         /// <summary>
         /// Moves to and returns the next statement
         /// </summary>
@@ -47,15 +55,14 @@ namespace MidnightStardew.MidnightInteractions
         public int StatementIndex { get; set; } = 0;
 
         public MidnightDialogue(NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
-            : base(speaker, default, currentConversation.Statement?[isQuestion ? currentConversation.Statement.Count - 1 : 0])
+            : base(speaker, default, "")
         {
             Conversation = currentConversation;
 
-            if (currentConversation.Statement == null)
-            {
-                return;
-            }
+            if (currentConversation.Statement == null) return;
 
+            parseDialogueString(currentConversation.Statement[isQuestion ? currentConversation.Statement.Count - 1 : 0]);
+            
             showPortrait = true;
             if (isQuestion)
             {
