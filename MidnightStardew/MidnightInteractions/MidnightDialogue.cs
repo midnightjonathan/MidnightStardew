@@ -26,33 +26,38 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// The current statement being displayed.
         /// </summary>
-        public string CurrentStatement => Parse(Conversation.Statement[StatementIndex]);
+        public string CurrentStatement
+        {
+            get
+            {
+                return Parse(Conversation.Statement[StatementIndex]);
+            }
+        }
         /// <summary>
-        /// Returns true if the statement index is the final statement of the dialogue.
+        /// Returns true if the statement index is the final statement of the dialogue..
         /// </summary>
-        public bool IsFinished => StatementIndex == LastStatementIndex;
+        public bool AreStatementsFinished => statementIndex == LastStatementIndex;
+        /// <summary>
+        /// Returns true if the statement index is the final interaction with the player.
+        /// </summary>
+        public bool IsFinished => statementIndex == LastIndex;
         /// <summary>
         /// Returns the last statement index of the conversation.
         /// </summary>
-        public int LastStatementIndex => Conversation.Responses == null ? Conversation.Statement.Count - 1 : Conversation.Statement.Count - 2;
+        public int LastStatementIndex => Conversation.Responses == null ? LastIndex : LastIndex - 1;
         /// <summary>
         /// The last index of the conversation, regardless of it being a question or not.
         /// </summary>
         public int LastIndex => Conversation.Statement.Count - 1;
-        /// <summary>
-        /// Moves to and returns the next statement
-        /// </summary>
-        public string NextStatement
-        {
-            get
-            {
-                return Parse(Conversation.Statement[++StatementIndex]);
-            }
-        }
+        private int statementIndex = 0;
         /// <summary>
         /// The index of the current statement.
         /// </summary>
-        public int StatementIndex { get; set; } = 0;
+        public int StatementIndex 
+        {
+            get => statementIndex;
+            set => statementIndex = value;
+        }
 
         public MidnightDialogue(NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
             : base(speaker, default, "")
@@ -70,6 +75,19 @@ namespace MidnightStardew.MidnightInteractions
             }
         }
 
+        /// <summary>
+        /// Moves to and returns the next statement
+        /// </summary>
+        public string GetNextStatement()
+        {
+            return Parse(Conversation.Statement[++StatementIndex]);
+        }
+
+        /// <summary>
+        /// Handles custom statement parsing.
+        /// </summary>
+        /// <param name="statement">Statement to parse</param>
+        /// <returns>The statement with statement commands removed.</returns>
         protected virtual string Parse(string statement)
         {
             var parsedStatment = statement.Replace("[Farmer]", MidnightFarmer.LocalFarmer.Name);

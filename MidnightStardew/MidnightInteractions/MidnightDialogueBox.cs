@@ -18,6 +18,10 @@ namespace MidnightStardew.MidnightInteractions
         /// The Stardew NPC that should be displayed.
         /// </summary>
         public NPC Speaker { get; set; }
+
+        private bool hasSetDialogueIcon = false;
+        public TemporaryAnimatedSprite DialogueIcon { get; set; }
+
         /// <summary>
         /// The conversation that the NPC is having with the player.
         /// </summary>
@@ -84,9 +88,11 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         public void Display()
         {
-            if (Conversation.Statement == null) 
-            {
+            hasSetDialogueIcon = false;
 
+            if (Conversation.Statement == null)
+            {
+                Conversation.ApplyEffects(MidnightFarmer.LocalFarmer);
             }
             else if (Conversation.Responses == null || Conversation.Statement.Count > 1)
             {
@@ -182,15 +188,49 @@ namespace MidnightStardew.MidnightInteractions
         public void HandleStatementClick()
         {
             if (transitioning || safetyTimer > 0) return; // Ignore clicks happens too quickly.
-            if (CharacterDialogue.IsFinished && !isQuestion)
+            if (CharacterDialogue.AreStatementsFinished && !isQuestion)
             {
                 closeDialogue();
                 Conversation.ApplyEffects(MidnightFarmer.LocalFarmer);
                 return;
             }
 
-            characterDialoguesBrokenUp.Push(CharacterDialogue.NextStatement);
+            characterDialoguesBrokenUp.Clear();
+            characterDialoguesBrokenUp.Push(CharacterDialogue.GetNextStatement());
             safetyTimer = 750;
+        }
+
+        /// <summary>
+        /// Sets up the close dialogue icon.
+        /// </summary>
+        private void SetUpCloseDialogueIcon()
+        {
+            Vector2 iconPosition = new Vector2(this.x + base.width - 40, this.y + base.height - 44);
+            if (isPortraitBox())
+            {
+                iconPosition.X -= 492f;
+            }
+            DialogueIcon = new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(289, 342, 11, 12), 80f, 11, 999999, iconPosition, false, false, 0.89f, 0f, Color.White, 4f, 0f, 0f, 0f, true);
+            dialogueIcon = DialogueIcon;
+        }
+
+        /// <summary>
+        /// Sets up the next page icon.
+        /// </summary>
+        private void SetUpNextPageIcon()
+        {
+            Vector2 iconPosition = new Vector2(this.x + base.width - 40, this.y + base.height - 40);
+            if (isPortraitBox())
+            {
+                iconPosition.X -= 492f;
+            }
+            DialogueIcon = new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(232, 346, 9, 9), 90f, 6, 999999, iconPosition, false, false, 0.89f, 0f, Color.White, 4f, 0f, 0f, 0f, true)
+            {
+                yPeriodic = true,
+                yPeriodicLoopTime = 1500f,
+                yPeriodicRange = 8f
+            };
+            dialogueIcon = DialogueIcon;
         }
 
         /// <summary>
@@ -204,11 +244,6 @@ namespace MidnightStardew.MidnightInteractions
             closeDialogue();
             Display();
         }
-
-        //public override void performHoverAction(int mouseX, int mouseY)
-        //{
-        //    base.performHoverAction(mouseX, mouseY);
-        //}
 
         /// <summary>
         /// Handles a left click.
@@ -227,6 +262,21 @@ namespace MidnightStardew.MidnightInteractions
                 HandleStatementClick();
             }
 
+        }
+
+        /// <summary>
+        /// Updates the Dialogue Box.
+        /// </summary>
+        /// <param name="time">Time since last tick.</param>
+        public override void update(GameTime time)
+        {
+            base.update(time);
+            if (!hasSetDialogueIcon)
+            {
+                if (CharacterDialogue.IsFinished) SetUpCloseDialogueIcon(); else SetUpNextPageIcon();
+                hasSetDialogueIcon = true;
+            }
+            dialogueIcon = DialogueIcon;
         }
     }
 }
