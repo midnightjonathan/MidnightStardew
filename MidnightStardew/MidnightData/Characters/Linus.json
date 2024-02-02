@@ -1,0 +1,19 @@
+{
+    "Name": "Linus",
+    "Conversations": [
+        {
+            "Key": "Introduction",
+            "Statement": [
+                "You're cool, we're friends now."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "4000"
+                }
+            }
+        },
+        {
+            "Statement": [ "Hi", "I live in a tent."]
+        }
+    ]
+}

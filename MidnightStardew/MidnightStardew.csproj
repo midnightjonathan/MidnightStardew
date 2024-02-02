@@ -12,11 +12,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MidnightSpots\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="MidnightSpots\Spots.json">
+    <None Update="MidnightData\Characters\Leah.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MidnightData\Characters\Linus.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MidnightData\Characters\Maru.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MidnightData\Characters\Robin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MidnightData\Spots.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

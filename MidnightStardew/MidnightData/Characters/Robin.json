@@ -1,0 +1,737 @@
+{
+    "Name": "Robin",
+    "Conversations": [
+        {
+            "Key": "Introduction",
+            "Statement": [
+                "[Image happy]Hello again! I know we met earlier but in case you forgot I'm Robin.",
+                "If you ever need anyone to talk to, come find me!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "100"
+                },
+                "Hearts": "-10000"
+            }
+        }, // Introduction
+        {
+            "Key": "missinghammer",
+            "Statement": [
+                "[Image angry]I can't find my best hammer.",
+                "[Image neutral]I have several so it isn't really that big of an issue I guess.",
+                "[Image sad]The weight is just right though."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "[Image happy]Remeber I told you I had lost my hammer?",
+                    "Well, I found it in Maru's room!",
+                    "She's always tinkering with something!"
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                }
+            }
+        }, // Missing hammer
+        {
+            "Key": "builthouse",
+            "Reqs": {
+                "Location": "ScienceHouse"
+            },
+            "Statement": [
+                "[Image happy]I built our house from the ground up.",
+                "It's the biggest project I have taken on so far.",
+                "[Image angry]I'm really proud of this house."
+            ],
+            "Effects": {
+                "Rapport": "100"
+            }
+        }, // Built house
+        {
+            "Reqs": {
+                "Keys": [ "builthouse" ],
+                "Location": "ScienceHouse"
+            },
+            "Statement": [
+                "Have I told you that I built this house?",
+                "Oh, yeah, I guess I have.",
+                "[Image happy]I'm just really proud of it."
+            ],
+            "Effects": {
+                "Rapport": "50"
+            }
+        }, // Built house redo
+        {
+            "Statement": [
+                "Hey [Farmer]!",
+                "If you need any building materials or blueprints, my shop is the place to go!",
+                "Plus, you're helping support our local economy."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Support local economy
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "1-2"
+                }
+            },
+            "Statement": [
+                "Do you go to the saloon?",
+                "I go there with Demetrius and dance on Friday nights.",
+                "You should come and say hi!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Meet at saloon
+        {
+            "Statement": [
+                "Hey there, [Farmer].",
+                "I was just daydreaming about some new carpentry projects.",
+                "[Image happy]I love working with wood!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Carpentry daydreams
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "0-1"
+                }
+            },
+            "Statement": [
+                "You're always welcome to visit us, even if you aren't shopping, you know.",
+                "It can get pretty lonely up in the mountains."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Lonely in the mountains 1
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "2-4"
+                }
+            },
+            "Statement": [
+                "You're always welcome to visit me, even if you aren't shopping, you know.",
+                "I get pretty lonely up in the mountains."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Lonely in the mountains 2
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "5"
+                }
+            },
+            "Statement": [
+                "I'm always really happen when you visit.",
+                "You really help me feel less alone up in the mountains."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Lonely in the mountains 3
+        {
+            "Key": "isleahfriend",
+            "Reqs": {
+                "OtherStats": {
+                    "Leah": {
+                        "Rapport": "4"
+                    }
+                },
+                "Stats": {
+                    "Rapport": "4"
+                }
+            },
+            "Statement": [
+                "I've heard you've been getting to know Leah.",
+                "What do you think of her?",
+                "How do you respond:"
+            ],
+            "Responses": {
+                "I hope to marry her some day.": {
+                    "Statement": [
+                        "Really...?",
+                        "Wow, good for you!"
+                    ],
+                    "Effects": {
+                        "Rapport": "100"
+                    }
+                },
+                "She's a great friend.": {
+                    "Statement": [
+                        "I would love to have someone to talk about wood working with.",
+                        "I know her art is different than what I do...",
+                        "but at least she would have some understanding of what I'm talking about."
+                    ],
+                    "Effect": {
+                        "Stats": {
+                            "Rapport": "100"
+                        }
+                    }
+                },
+                "She's very free spirited": {
+                    "Statement": [
+                        "[Image happy]I've heard that!",
+                        "[Image sad]I wish I had her freedom some times.",
+                        "[Image neutral]Well, let her know that I'd love to talk wood with her some time."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "100"
+                        }
+                    },
+                    "NextConversation": {
+                        "Key": "befriendleah",
+                        "Statement": [
+                            "I've been thinking a lot about Leah since we last talked.",
+                            "I think she might be exactly the kind of person I need in my life right now.",
+                            "Thanks for talking to me about her."
+                        ],
+                        "Effects": {
+                            "Stats": {
+                                "Rapport": "200"
+                            }
+                        }
+                    }
+                }
+            }
+        }, // Befriend Leah.
+        {
+            "Reqs": {
+                "OtherStats": {
+                    "Sebastian": {
+                        "Rapport": "0-0"
+                    }
+                },
+                "Location": "ScienceHouse"
+            },
+            "Statement": [
+                "My son, Sebastian, lives downstairs.",
+                "Not sure if you've met him, he's a little shy.",
+                "I'm sure he'll warm up to you if you're nice to him."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Please get to know Sebastian
+        {
+            "Reqs": {
+                "OtherStats": {
+                    "Sebastian": {
+                        "Rapport": "1-4"
+                    }
+                }
+            },
+            "Statement": [
+                "I've seen you talking to Sebastian.",
+                "I hope he's doing okay, he doesn't really talk to me very much."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Getting to know Sebastian
+        {
+            "Key": "ashtraynevermind",
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "3-6"
+                }
+            },
+            "Statement": [
+                "I found an ashtray in Sebastian's room, and it smelled really weird. Should I be worried about this?",
+                "Oh, nevermind, I shouldn't talk to you about it.",
+                "It's just that sometimes I worry about Sebastian... he doesn't have many friends and doesn't really seem to care about his future very much...",
+                "I would talk to him about it but he never opens up to me."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Weird ashtray, nevermind
+        {
+            "Key": "ashtray",
+            "Reqs": {
+                "Keys": [ "ashtraynevermind" ],
+                "Stats": {
+                    "Rapport": "7"
+                }
+            },
+            "Statement": [
+                "I found another ashtray in Sebastian's room that smelled weird.",
+                "Do you think I should worry about it?",
+                "He is a grown up after all... he just doesn't seem to worry about himself.",
+                "How do you respond:"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "Responses": {
+                "Say its no big deal": {
+                    "Statement": [
+                        "Oh, you're probably right.",
+                        "It's hard not to worry about your kids.",
+                        "...",
+                        "He doesn't worry enough about himself, you know. He thinks that somehow everything is going to suddenly work itself out.",
+                        "But it won't. Nothing 'works it's self out,' someone works it out, someone figures out what to do.",
+                        "You're right though, if I say anything I'm just going to be the 'over-protective mom' and he'll just get mad at me for it.",
+                        "I failed him some how, I wish...",
+                        "I wish he'd open up to me."
+                    ]
+                },
+                "Say he's an adult and needs to make his own decisions": {
+                    "Statement": [
+                        "I know, but it's just so hard not to worry.",
+                        "...",
+                        "He doesn't worry enough about himself, you know. He thinks that somehow everything is going to suddenly work itself out.",
+                        "But it won't. Nothing 'works it's self out,' someone works it out, someone figures out what to do.",
+                        "You're right though, if I say anything I'm just going to be the 'over-protective mom' and he'll just get mad at me for it.",
+                        "I failed him some how, I wish...",
+                        "I wish he'd open up to me."
+                    ]
+                },
+                "Ask if she wants you to talk to him": {
+                    "Statement": [
+                        "Oh... No. I don't want to put you in that position.",
+                        "He'd most likely think I put you up to it anyway, so he'd most likely be mad at you for taking my side.",
+                        "...",
+                        "There aren't sides though are there, I'm just trying to help him, that's not a different side.",
+                        "It's his side, whether he likes it or not!",
+                        "And I have to worry about him, because he doesn't worry about himself.",
+                        "He thinks that somehow everything is going to suddenly work itself out.",
+                        "But it won't. Nothing 'works it's self out,' someone works it out, someone figures out what to do.",
+                        "You're right though, if I say anything I'm just going to be the 'over-protective mom' and he'll just get mad at me for it.",
+                        "I failed him some how, I wish...",
+                        "I wish he'd open up to me."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "200"
+                        }
+                    }
+                },
+                "Tell her she should talk to him": {
+                    "Statement": [
+                        "It won't go well if I do.",
+                        "He'll say I'm just an over-protective mom, worrying about nothing.",
+                        "...",
+                        "Nothing but him! He's my son.",
+                        "He doesn't worry about himself, at all. So, I have to worry about him.",
+                        "He thinks that somehow everything is going to suddenly work itself out.",
+                        "But it won't. Nothing 'works it's self out,' someone works it out, someone figures out what to do.",
+                        "He's going to say, I'm just going to be the 'over-protective mom' and then he'll be mad at me for it.",
+                        "I failed him some how, I wish...",
+                        "I wish he'd open up to me.",
+                        "But I didn't become a mom to have children like me, I became a mom to raise them into responsible adults",
+                        "I will talk to him, it won't go well, but I have to try."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "200"
+                        }
+                    },
+                    "NextConversation": {
+                        "Statement": [
+                            "Well that went about as well as expected...",
+                            "Oh, sorry, the conversation about the weird smell with Sabastian.",
+                            "He told me it was nothing, I told him he needed to be careful, he told me I was treating him like a child.",
+                            "I told him he needed to stop acting like a child...",
+                            "That was probably a mistake. Though he does!",
+                            "He needs to find his own place to live, I'd love it was in town, but regardless he needs to take responsibility for himself.",
+                            "Thanks for listening, I'm really glad we're friends."
+                        ],
+                        "Effects": {
+                            "Stats": {
+                                "Rapport": "100"
+                            }
+                        }
+                    }
+                }
+            }
+        }, // Weird Ashtray
+        {
+            "Reqs": {
+                "Location": "Mountains"
+            },
+            "Statement": [
+                "[Image happy]Our house is in such a beautiful area, don't you think?",
+                "I love the fresh air of the mountains."
+            ]
+        }, // Beautiful mountains
+        {
+            "Reqs": {
+                "MissingKeys": [ "demetriusexplosion" ]
+            },
+            "Statement": [
+                "I hope Demetrius doesn't blow the house up with those science experiments of his.",
+                "I'm not even sure what he's working on. I think it has something to do with plants."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Demetrius explosion risk
+        {
+            "Key": "demetriusexplosion",
+            "Statement": [
+                "[Image angry]My husband almost set the house on fire last night with his science experiment.",
+                "One of his beakers exploded and sent a fireball into the rafters! Thank Yoba I used fire-resistant lacquer when I built the place.",
+                "[Image sad]Sorry about the weird smell in here, [Farmer]. It's my husband's bizarre science project..."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "100"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "[Image sad]The house still smells from that explosion Demetrius caused.",
+                    "He and Maru did scrub his lab down to try to help, but I had to do the rest of the house.",
+                    "Sabastian apparently doesn't mind the smell..."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                }
+            }
+        }, // Demetrius Explosion
+        {
+            "Reqs": {
+                "Keys": [ "demetriusexplosion" ]
+            },
+            "Statement": [
+                "I hope Demetrius doesn't blow the house up, again, with those science experiments of his.",
+                "I'm not even sure what he's working on. He can't explain it to me in a way that makes sense.",
+                "[Image angry]Something to do with plants, but plants aren't know for throwing fireballs at my ceiling!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Demetrius explosion risk follow up
+        {
+            "Key": "memberofcommunity",
+            "Reqs": {
+                "Year": "2"
+            },
+            "Statement": [
+                "Hi [Farmer]! It's good to see you.",
+                "Do you feel like you're apart of the community yet?",
+                "How do you respond?"
+            ],
+            "Responses": {
+                "Tell her you do": {
+                    "Statement": [
+                        "I'm happy to hear that!",
+                        "You've been here for so long, it's hard to imagine the valley without you."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "100"
+                        }
+                    }
+                },
+                "Tell her you don't yet": {
+                    "Statement": [
+                        "I'm sorry to hear that!",
+                        "If there is anything I can do to make you feel more at home just let me know!"
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "50"
+                        }
+                    },
+                    "NextConversation": {
+                        "Reqs": {
+                            "Stats": {
+                                "Rapport": "3"
+                            }
+                        },
+                        "Statement": [
+                            "I've been thinking about you not feeling at home here yet.",
+                            "Well..",
+                            "I wanted you to know that you being here has made my life better. And I don't think I'm alone in that feeling.",
+                            "So thanks for moving to the valley.",
+                            "Thanks for being my friend.",
+                            "It means a lot."
+                        ],
+                        "Effects": {
+                            "Stats": {
+                                "Rapport": "100"
+                            }
+                        }
+                    }
+                },
+                "Tell her you miss the city": {
+                    "Statement": [
+                        "Oh! Well, I guess the city does have lots of things to do that we don't out here."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-200"
+                        }
+                    }
+                }
+            }
+        }, // Member of the community
+        {
+            "Reqs": {
+                "Season": [ "Summer" ]
+            },
+            "Statement": [
+                "Wood is a wonderful substance... it's versatile, cheap, strong, and each piece has it's own unique character!",
+                "The beautiful soft wood you get in the summer, is one of the reasons I love the season.",
+                "It cracks more easily, so you have to be a bit more careful."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Summer working with wood
+        {
+            "Reqs": {
+                "Season": [ "Summer" ]
+            },
+            "Statement": [
+                "If you need any buildings on your farm upgraded, just ask me!",
+                "You'll need to provide enough lumber and stone for the project. And it costs money, too.",
+                "[Image happy]But I'm sure you'll be pleased with the results!",
+                "I really like building projects in the summer!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Summer buildings
+        {
+            "Reqs": {
+                "Season": [ "Summer" ]
+            },
+            "Statement": [
+                "We're pretty insulated from the rest of the world here in Stardew Valley.",
+                "It has its pros and cons."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "I love being away from the city, but it'd be nice to have more places to go out.",
+                    "You know, some times it'd be nice to go out without anyone knowing who I am."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                }
+            }
+        }, // Summer insulated in Stardew Valley
+        {
+            "Reqs": {
+                "OtherStats": {
+                    "Maru": {
+                        "Rapport": "3-5"
+                    }
+                }
+            },
+            "Statement": [
+                "So...",
+                "How are you and Maru getting along?",
+                "How are you and Maru getting along?"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "Responses": {
+                "Just friends": {
+                    "Statement": [
+                        "That's great! She's always working on her inventions.",
+                        "Maybe you could help her with her inventions!",
+                        "[Image happy]Farmer by day! Inventor by night!"
+                    ]
+                },
+                "Just aquantainces": {
+                    "Statement": [
+                        "Well, if you're interested in inventing, she's a good lady to know!",
+                        "I keep hoping she'll create something that she can sell and move out on her own.",
+                        "[Image sad]I don't know what Demetrius would do if she left home though."
+                    ]
+                },
+                "Hoping for more": {
+                    "Statement": [
+                        "[Image love]That's great, little hint, she loves her inventions.",
+                        "She uses a lot of gems in her in them, so if you want to impress her thats a safe way to go."
+                    ]
+                }
+            }
+        }, // Maru Relationship
+        {
+            "Key": "knowlinus",
+            "Statement": [
+                "Have you met the wild man that lives behind our house?"
+            ],
+            "Responses": {
+                "Yes, Linus and I are friends": {
+                    "Reqs": {
+                        "OtherStats": {
+                            "Linus": {
+                                "Rapport": "3"
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "Oh really!",
+                        "He's a little disconcerting, but I guess he isn't doing any harm up there.",
+                        "I do wonder why he lives up there some times."
+                    ],
+                    "Effect": {
+                        "Stats": {
+                            "Rapport": "-100"
+                        }
+                    }
+                },
+                "Yes, He's okay": {
+                    "Reqs": {
+                        "OtherStats": {
+                            "Linus": {
+                                "Rapport": "1"
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "You don't think he's dangerous?",
+                        "As long as he doesn't bother us, and he hasn't so far, I guess I don't really mind.",
+                        "I do wonder why he lives up there some times, and what he does with all of his time."
+                    ],
+                    "Effect": {
+                        "Stats": {
+                            "Rapport": "100"
+                        }
+                    }
+                },
+                "Yes, I'm not sure about him": {
+                    "Statement": [
+                        "He hasn't caused any trouble so far.",
+                        "...",
+                        "I guess I don't really mind, as long as he doesn't bother us."
+                    ],
+                    "Effect": {
+                        "Stats": {
+                            "Rapport": "50"
+                        }
+                    }
+                },
+                "Not really": {
+                    "Statement": [
+                        "He hasn't caused any trouble so far.",
+                        "...",
+                        "I guess I don't really mind, as long as he doesn't bother us."
+                    ],
+                    "Effect": {
+                        "Stats": {
+                            "Rapport": "50"
+                        }
+                    }
+                }
+            }
+        }, // Know Linus
+        {
+            "Reqs": {
+                "Season": [ "Winter" ]
+            },
+            "Statement": [
+                "Hey [Farmer]!",
+                "With the farm work settled down it's a great time to gather wood!",
+                "The wood is harder in the winter so you don't have to be careful with it.",
+                "Maybe nows a good time to collect enough to upgrade your house!"
+            ]
+        }, // Winter wood
+        {
+            "Key": "unsupportiveparents",
+            "Reqs": {
+                "Stas": {
+                    "Rapport": "2"
+                }
+            },
+            "Statement": [
+                "My parents were bewildered when I told them I wanted to be a carpenter.",
+                "[Image sad]They were pretty old-fashioned and wanted me to spend my time looking for a carpenter, rather than being one."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "[Image sad]I was thinking about my parents not supporting my decision to go into woodworking.",
+                    "I know it's not the same but...",
+                    "I wonder if thats how Sabastian feel about going into computers.",
+                    "[Image neutral]It's not like I told him it was a bad idea, but I don't know how to talk to him about them.",
+                    "[Image sad]I guess he must feel pretty unsupported to."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "100"
+                    }
+                }
+            }
+        }, // Unsupportive Parents
+        {
+            "Reqs": {
+                "Season": [ "Winter" ],
+                "Location": "Mountain"
+            },
+            "Statement": [
+                "Our house is in such a beautiful area, isn't it?",
+                "Everything looks still and clean after a fresh snow."
+            ],
+            "Effect": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        } // Winter mountain beauty
+    ]
+}

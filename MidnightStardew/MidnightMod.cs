@@ -15,6 +15,8 @@ namespace MidnightStardew
         public delegate void GameLoadedDelegate(object sender, EventArgs e);
         public event GameLoadedDelegate? GameLoaded;
 
+        public virtual bool DoLoadMidnightCharacters { get; } = true;
+
         public static MidnightMod? Get { get; private set; }
 
         public MidnightMod() : base()
@@ -45,13 +47,27 @@ namespace MidnightStardew
         /// </summary>
         protected virtual void LoadSpots() { }
 
+        private void LoadMidnightNpcs()
+        {
+            if (!DoLoadMidnightCharacters) return;
+
+            var characterDir = Path.Combine(Helper.DirectoryPath, "MidnightData", "Characters");
+
+            foreach (var characterFile in Directory.EnumerateFiles(characterDir))
+            {
+                if (Path.GetExtension(characterFile) != ".json") continue;
+                Helper.GameContent.InvalidateCache($"Characters/Dialogue/{Path.GetFileNameWithoutExtension(characterFile)}");
+                MidnightNpc.Create<MidnightNpc>(characterFile);
+            }
+        }
+
         /// <summary>
         /// Loads built in Midnight Stardew spots.
         /// </summary>
         /// <exception cref="ApplicationException">Thrown if the Spots.json is empty.</exception>
         private void LoadMidnightSpots()
         {
-            var spotFile = Path.Combine(Helper.DirectoryPath, "MidnightSpots", "Spots.json");
+            var spotFile = Path.Combine(Helper.DirectoryPath, "MidnightData", "Spots.json");
 
             var spotJson = File.ReadAllText(spotFile);
             var spots = JsonConvert.DeserializeObject<Dictionary<string, MidnightSpot>>(spotJson) ?? throw new ApplicationException("No spots loaded.");
@@ -69,6 +85,7 @@ namespace MidnightStardew
             if (e.NewStage == LoadStage.Ready)
             { 
                 GameLoaded?.Invoke(this, e);
+                LoadMidnightNpcs();
                 LoadNpcs();
                 LoadMidnightSpots();
             }
