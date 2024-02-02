@@ -152,6 +152,10 @@ namespace MidnightStardew.MidnightInteractions
             Game1.dialogueUp = true;
         }
 
+        /// <summary>
+        /// Gets the options that are available to the player.
+        /// </summary>
+        /// <returns>Set of conversations with their response keys.</returns>
         private Dictionary<string, MidnightConversation> GetOptions()
         {
             Dictionary<string, MidnightConversation> available = new();
