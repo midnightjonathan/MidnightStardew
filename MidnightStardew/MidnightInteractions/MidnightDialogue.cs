@@ -46,10 +46,16 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         public int StatementIndex { get; set; } = 0;
 
-        public MidnightDialogue(StardewValley.NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
-            : base(speaker, default, currentConversation.Statement[isQuestion ? currentConversation.Statement.Count - 1 : 0])
+        public MidnightDialogue(NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
+            : base(speaker, default, currentConversation.Statement?[isQuestion ? currentConversation.Statement.Count - 1 : 0])
         {
             Conversation = currentConversation;
+
+            if (currentConversation.Statement == null)
+            {
+                return;
+            }
+
             showPortrait = true;
             if (isQuestion)
             {

@@ -84,7 +84,11 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         public void Display()
         {
-            if (Conversation.Responses == null || Conversation.Statement.Count > 1)
+            if (Conversation.Statement == null) 
+            {
+
+            }
+            else if (Conversation.Responses == null || Conversation.Statement.Count > 1)
             {
                 DisplayStatement();
             }

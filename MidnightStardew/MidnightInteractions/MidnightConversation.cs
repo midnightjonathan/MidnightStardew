@@ -71,7 +71,7 @@ namespace MidnightStardew.MidnightInteractions
         {
             get
             {
-                if (string.IsNullOrEmpty(key)) return Statement[0];
+                if (string.IsNullOrEmpty(key)) return Statement?[0] ?? "<Null Statement>";
                 return key;
             }
             set => key = value;
