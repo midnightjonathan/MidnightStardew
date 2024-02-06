@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MidnightStardew.MidnightWorld
 {
     public class MidnightSpot
@@ -33,6 +28,17 @@ namespace MidnightStardew.MidnightWorld
         /// The position and size of the spot on the game map.
         /// </summary>
         public List<Microsoft.Xna.Framework.Rectangle> Rects { get; set; }
+
+        /// <summary>
+        /// The middle of the primary rect.
+        /// </summary>
+        public Microsoft.Xna.Framework.Point Middle 
+        {
+            get
+            {
+                return new Microsoft.Xna.Framework.Point(Rects[0].X + (Rects[0].Width / 2), Rects[0].Y + (Rects[0].Height / 2));
+            } 
+        }
 
         /// <summary>
         /// Creates a new spot.

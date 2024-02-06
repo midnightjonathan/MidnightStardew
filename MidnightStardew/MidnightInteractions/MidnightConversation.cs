@@ -15,6 +15,7 @@ namespace MidnightStardew.MidnightInteractions
     [DebuggerDisplay("MidnightConversation: {Key}")]
     public class MidnightConversation
     {
+        #region Static
         /// <summary>
         /// All keyed Conversations.
         /// </summary>
@@ -42,32 +43,17 @@ namespace MidnightStardew.MidnightInteractions
                 Get[$"{speaker.Name}_{conversation.key}"] = conversation;
             }
         }
+        #endregion
 
-        /// <summary>
-        /// List of statements that the NPC will say to the player.I Thats 
-        /// </summary>
-        public List<string> Statement { get; set; }
-        /// <summary>
-        /// The requirements that need to be met to make this conversation happen.
-        /// </summary>
-        public MidnightDialogueRequirements Requirements { get; set; }
-        /// <summary>
-        /// The options that the player can choose at the end of the Statements.
-        /// </summary>
-        public Dictionary<string, MidnightConversation> Responses { get; set; }
         /// <summary>
         /// The effects to apply to the NPC as a result of this conversation.
         /// </summary>
         public MidnightDialogueEffects Effects { get; set; }
-        /// <summary>
-        /// If populated, this indicates that the next conversation should be the given key.
-        /// </summary>
-        public MidnightConversation NextConversation { get; set; }
         private string key;
         /// <summary>
         /// The identifier of the conversation.
         /// </summary>
-        public string Key 
+        public string Key
         {
             get
             {
@@ -76,12 +62,27 @@ namespace MidnightStardew.MidnightInteractions
             }
             set => key = value;
         }
-
+        /// <summary>
+        /// Moves the character after the conversation.
+        /// </summary>
+        public MidnightMovement Move { get; set; }
+        /// <summary>
+        /// If populated, this indicates that the next conversation should be the given key.
+        /// </summary>
+        public MidnightConversation NextConversation { get; set; }
+        /// <summary>
+        /// The requirements that need to be met to make this conversation happen.
+        /// </summary>
+        public MidnightDialogueRequirements Requirements { get; set; }
+        /// <summary>
+        /// The options that the player can choose at the end of the Statements.
+        /// </summary>
+        public Dictionary<string, MidnightConversation> Responses { get; set; }
         private MidnightNpc? speaker;
         /// <summary>
         /// The default Midnight NPC that is speaking during the conversation.
         /// </summary>
-        public MidnightNpc? Speaker 
+        public MidnightNpc? Speaker
         {
             get => speaker;
             set
@@ -89,7 +90,8 @@ namespace MidnightStardew.MidnightInteractions
                 if (speaker != null)
                 {
                     throw new ApplicationException("Speaker has already been set.");
-                } else if (value == null)
+                }
+                else if (value == null)
                 {
                     throw new ApplicationException("Speaker can not have null assigned to it.");
                 }
@@ -98,6 +100,10 @@ namespace MidnightStardew.MidnightInteractions
                 AddConversation(speaker, this);
             }
         }
+        /// <summary>
+        /// List of statements that the NPC will say to the player.I Thats 
+        /// </summary>
+        public List<string> Statement { get; set; }
 
         [JsonConstructor]
         public MidnightConversation(MidnightDialogueRequirements reqs, 
@@ -105,6 +111,7 @@ namespace MidnightStardew.MidnightInteractions
                                     Dictionary<string, MidnightConversation> responses, 
                                     MidnightDialogueEffects effects, 
                                     MidnightConversation nextConversation,
+                                    MidnightMovement move,
                                     string key)
 
         {
@@ -114,8 +121,10 @@ namespace MidnightStardew.MidnightInteractions
             Effects = effects;
             this.key = key?.ToLower() ?? "";
             NextConversation = nextConversation;
+            Move = move;
         }
 
+        #region Meets Requirements
         /// <summary>
         /// Determines if the this conversation can be displayed.
         /// </summary>
@@ -150,17 +159,17 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             #region Check calendar reqs
-            if (CheckOutRange(Requirements.Time, Game1.timeOfDay) ||
-                CheckOutList(Requirements.Days, SDate.Now().DayOfWeek.ToString()) ||
-                CheckOutList(Requirements.Season, Game1.currentSeason) ||
-                CheckOutRange(Requirements.Year, Game1.year))
+            if (CheckOutRange(Requirements?.Time, Game1.timeOfDay) ||
+                CheckOutList(Requirements?.Days, SDate.Now().DayOfWeek.ToString()) ||
+                CheckOutList(Requirements?.Season, Game1.currentSeason) ||
+                CheckOutRange(Requirements?.Year, Game1.year))
             {
                 return false;
             }
             #endregion
 
             #region Check NPC Relationship
-            if (CheckOutRange(Requirements.Hearts, Speaker.Hearts)) return false;
+            if (CheckOutRange(Requirements?.Hearts, Speaker.Hearts)) return false;
             foreach (var stat in Requirements?.Stats ?? new())
             {
                 var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
@@ -284,6 +293,7 @@ namespace MidnightStardew.MidnightInteractions
         {
             return !CheckInRange(reqRange, value);
         }
+        #endregion
 
         /// <summary>
         /// Apply the effects of the conversation to the speaker and/or farmer.
@@ -322,6 +332,16 @@ namespace MidnightStardew.MidnightInteractions
                 }
                 Speaker.Stats[farmer.UniqueMultiplayerID.ToString()][stat.Key] += int.Parse(stat.Value);
             }
+
+            if (Effects.Emote != -1)
+            {
+                Speaker.StardewNpc.doEmote(Effects.Emote, false);
+            }
+
+            if (Move != null)
+            {
+                Speaker.MoveTo(Move.LocationName, Move.Position, Move.AfterMoveConversation);
+            }
         }
     
         /// <summary>
@@ -341,6 +361,7 @@ namespace MidnightStardew.MidnightInteractions
             }
 
             NextConversation?.SetSpeaker(Speaker);
+            Move?.AfterMoveConversation?.SetSpeaker(Speaker);
         }
     }
 }

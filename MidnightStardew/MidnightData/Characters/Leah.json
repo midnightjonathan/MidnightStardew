@@ -4,16 +4,28 @@
         {
             "Key": "Introduction",
             "Statement": [
-                "You're cool, we're friends now."
+                "You're super cool, we're friends now."
             ],
             "Effects": {
                 "Stats": {
                     "Rapport": "4000"
                 }
+            },
+            "Move": {
+                "Spot": "LeahBed",
+                "AfterMove": {
+                    "Statement": [ "I'm in bed now." ]
+                }
             }
         },
         {
-            "Statement": [ "Hi", "I love to forage!"]
+            "Statement": [
+                "Hi",
+                "I love to forage!"
+            ],
+            "Effects": {
+                "Emote": 4
+            }
         }
     ]
 }

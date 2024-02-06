@@ -1,26 +1,10 @@
-﻿using Force.DeepCloner;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
 using MidnightStardew.MidnightInteractions;
 using Newtonsoft.Json;
 using StardewHappyEndings;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Extensions;
-using StardewValley.GameData.Characters;
-using StardewValley.Locations;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace MidnightStardew
 {
@@ -142,7 +126,7 @@ namespace MidnightStardew
             {
                 if (!hasIntroduced)
                 {
-                    hasIntroduced = ExperiencedConverastions.Contains("Introduction");
+                    hasIntroduced = ExperiencedConverastions.Contains($"introduction");
                 }
                 return hasIntroduced;
             }
@@ -263,6 +247,33 @@ namespace MidnightStardew
         public void DisplayDialogue()
         {
             new MidnightDialogueBox(this, ChooseDialogue()).Display();
+            StardewNpc.faceGeneralDirection(MidnightFarmer.LocalFarmer.Position);
+            //StardewNpc.controller = new StardewValley.Pathfinding.PathFindController(StardewNpc, StardewNpc.currentLocation, new Point(9, 6), 1);
+            //StardewNpc.performTenMinuteUpdate(500, StardewNpc.currentLocation);
+            //StardewNpc.controller.endBehaviorFunction = AfterPathing;
+        }
+
+
+        private MidnightConversation? AfterMoveConversation;
+        /// <summary>
+        /// Moves the NPC to the provided position.
+        /// </summary>
+        /// <param name="locationName">The name of the location the NPC should move to.</param>
+        /// <param name="position">The point to move the NPC to within the location.</param>
+        /// <param name="afterPathing">The function to call once the NPC reaches the destintation.</param>
+        public void MoveTo(string locationName, Point position, MidnightConversation? afterMoveConveration = null)
+        {
+            AfterMoveConversation = afterMoveConveration;
+            var location = Game1._locationLookup[locationName];
+            StardewNpc.controller = new StardewValley.Pathfinding.PathFindController(StardewNpc, location, position, 1, StartAfterMoveConversation);
+        }
+
+        public void StartAfterMoveConversation(Character character, GameLocation gameLocation)
+        {
+            if (AfterMoveConversation != null)
+            {
+                new MidnightDialogueBox(this, AfterMoveConversation).Display();
+            }
         }
 
         /// <summary>

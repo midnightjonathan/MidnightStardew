@@ -436,7 +436,7 @@
             "Statement": [
                 "I hope Demetrius doesn't blow the house up, again, with those science experiments of his.",
                 "I'm not even sure what he's working on. He can't explain it to me in a way that makes sense.",
-                "[Image angry]Something to do with plants, but plants aren't know for throwing fireballs at my ceiling!"
+                "[Image angry]Something to do with plants, but plants aren't known for throwing fireballs at my ceiling!"
             ],
             "Effects": {
                 "Stats": {
@@ -607,7 +607,7 @@
             }
         }, // Maru Relationship
         {
-            "Key": "knowlinus",
+            "Key": "Know Linus",
             "Statement": [
                 "Have you met the wild man that lives behind our house?"
             ],
@@ -688,7 +688,7 @@
             ]
         }, // Winter wood
         {
-            "Key": "unsupportiveparents",
+            "Key": "Unsupportive Parents",
             "Reqs": {
                 "Stas": {
                     "Rapport": "2"

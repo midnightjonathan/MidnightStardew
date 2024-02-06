@@ -19,8 +19,15 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         public NPC Speaker { get; set; }
 
+        /// <summary>
+        /// Tracks if a dialogue has been set.
+        /// </summary>
         private bool hasSetDialogueIcon = false;
-        public TemporaryAnimatedSprite DialogueIcon { get; set; }
+        /// <summary>
+        /// The dialogue icon to be used, resets the underlying DialogueBox dialogueIcon every update.
+        /// No it's not clean - but it works.
+        /// </summary>
+        public TemporaryAnimatedSprite? DialogueIcon { get; set; }
 
         /// <summary>
         /// The conversation that the NPC is having with the player.

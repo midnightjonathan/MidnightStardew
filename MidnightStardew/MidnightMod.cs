@@ -10,7 +10,7 @@ using System;
 
 namespace MidnightStardew
 {
-    public abstract class MidnightMod : Mod
+    public class MidnightMod : Mod
     {
         public delegate void GameLoadedDelegate(object sender, EventArgs e);
         public event GameLoadedDelegate? GameLoaded;
@@ -35,7 +35,7 @@ namespace MidnightStardew
         /// <summary>
         /// Called when the mod is loaded.
         /// </summary>
-        protected abstract void Start();
+        protected virtual void Start() { }
 
         /// <summary>
         /// Loads the Npcs when the game is loaded from a save.
@@ -85,9 +85,14 @@ namespace MidnightStardew
             if (e.NewStage == LoadStage.Ready)
             { 
                 GameLoaded?.Invoke(this, e);
-                LoadMidnightNpcs();
+
+                if (Helper.DirectoryPath.Split(Path.DirectorySeparatorChar)[^1] == "MidnightStardew")
+                {
+                    LoadMidnightSpots();
+                    LoadMidnightNpcs();
+                }
+                var t = Helper.DirectoryPath.Split(Path.DirectorySeparatorChar)[^1];
                 LoadNpcs();
-                LoadMidnightSpots();
             }
         }
     }
