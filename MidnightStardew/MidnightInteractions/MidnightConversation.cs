@@ -128,7 +128,6 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// Determines if the this conversation can be displayed.
         /// </summary>
-        /// <param name="farmer">The farmer for the npc to talk to.</param>
         /// <returns>If the farmer meets the requirements for this conversation.</returns>
         public bool MeetsRequirements()
         {
@@ -182,14 +181,23 @@ namespace MidnightStardew.MidnightInteractions
                 Speaker.Stats[farmer.UniqueMultiplayerID.ToString()][stat.Key] += int.Parse(stat.Value);
             }
 
+            // Emote for the Npc to do
             if (Effects.Emote != -1)
             {
                 Speaker.StardewNpc.doEmote(Effects.Emote, false);
             }
 
+            // Move Npc
             if (Move != null)
             {
                 Speaker.MoveTo(Move.LocationName, Move.Position, Move.AfterMoveConversation);
+            }
+
+            // Give gift to farmer
+            if (Effects.ItemId != null)
+            {
+                Item item = ItemRegistry.Create(Effects.ItemId);
+                MidnightFarmer.LocalFarmer.addItemByMenuIfNecessary(item);
             }
         }
     
