@@ -19,6 +19,8 @@ namespace MidnightStardew
         /// </summary>
         public HashSet<string> ExperiencedConverastions { get; set; }
 
+        public MidnightConversation? NextConversation { get; set; }
+
         /// <summary>
         /// Indicates if the NPC has met the player.
         /// </summary>
@@ -35,6 +37,7 @@ namespace MidnightStardew
             Stats = npc.Stats;
             ExperiencedConverastions = npc.ExperiencedConverastions;
             HasIntroduced = npc.HasIntroduced;
+            NextConversation = npc.NextConversation;
         }
     }
 }

@@ -214,6 +214,7 @@ namespace MidnightStardew
                 Stats = npcSave.Stats;
                 ExperiencedConverastions = npcSave.ExperiencedConverastions;
                 hasIntroduced = npcSave.HasIntroduced;
+                nextConversation = npcSave.NextConversation;
             }
         }
 
