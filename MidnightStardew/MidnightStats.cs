@@ -13,7 +13,7 @@ namespace MidnightStardew
         {
             get
             {
-                if (base.TryGetValue(key, out int value))
+                if (base.TryGetValue(key.ToLower(), out int value))
                 {
                     return value;
                 }
@@ -21,7 +21,7 @@ namespace MidnightStardew
             }
             set
             {
-                base[key] = value;
+                base[key.ToLower()] = value;
             }
         }
     }

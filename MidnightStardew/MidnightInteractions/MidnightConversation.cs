@@ -73,7 +73,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// The requirements that need to be met to make this conversation happen.
         /// </summary>
-        public MidnightDialogueRequirements Requirements { get; set; }
+        public MidnightRequirements Requirements { get; set; }
         /// <summary>
         /// The options that the player can choose at the end of the Statements.
         /// </summary>
@@ -106,7 +106,7 @@ namespace MidnightStardew.MidnightInteractions
         public List<string> Statement { get; set; }
 
         [JsonConstructor]
-        public MidnightConversation(MidnightDialogueRequirements reqs, 
+        public MidnightConversation(MidnightRequirements reqs, 
                                     List<string> statement, 
                                     Dictionary<string, MidnightConversation> responses, 
                                     MidnightDialogueEffects effects, 
@@ -134,164 +134,13 @@ namespace MidnightStardew.MidnightInteractions
         {
             if (Speaker == null) throw new ApplicationException("Conversation speaker not set.");
 
-            #region Check not experianced
-            if (!string.IsNullOrEmpty(key) && Speaker.ExperiencedConverastions.Contains(key))
-            {
-                return false;
-            }
-            #endregion
+            // Ensure the conversation hasn't already happened.
+            if (!string.IsNullOrEmpty(key) && Speaker.ExperiencedConverastions.Contains(key)) return false;
 
-            if (Requirements == null) return true;
-
-            #region Check location information
-            var location = Speaker.StardewNpc.currentLocation;
-            if (CheckStringNoMatch(Requirements?.Location, location.Name) || //Location itself
-                CheckStringNoMatch(Requirements?.Weather, location.GetWeather().Weather)) //Location weather
-            {
-                return false;
-            }
-
-            if (Requirements?.Spot != null &&
-                !MidnightSpot.Get[Requirements.Spot].IsIn(Speaker))
-            {
-                return false;
-            }
-            #endregion
-
-            #region Check calendar reqs
-            if (CheckOutRange(Requirements?.Time, Game1.timeOfDay) ||
-                CheckOutList(Requirements?.Days, SDate.Now().DayOfWeek.ToString()) ||
-                CheckOutList(Requirements?.Season, Game1.currentSeason) ||
-                CheckOutRange(Requirements?.Year, Game1.year))
-            {
-                return false;
-            }
-            #endregion
-
-            #region Check NPC Relationship
-            if (CheckOutRange(Requirements?.Hearts, Speaker.Hearts)) return false;
-            foreach (var stat in Requirements?.Stats ?? new())
-            {
-                var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
-                var npcStat = Speaker.GetStatLevel(id, stat.Key);
-
-                if (CheckOutRange(stat.Value, npcStat)) return false;
-            }
-            if (CheckOutList(Requirements?.RelationshipStatus, Speaker.RelationshipStatus)) return false;
-            #endregion
-
-            #region Check other NPC Relationship
-            foreach (var otherStat in Requirements?.OtherStats ?? new())
-            {
-                var npc = MidnightNpc.Get[otherStat.Key];
-                foreach (var stat in otherStat.Value)
-                {
-                    var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
-                    var npcStat = npc.GetStatLevel(id, stat.Key);
-
-                    if (CheckOutRange(stat.Value, npcStat)) return false;
-                }
-            }
-            #endregion
-
-            #region Check keys
-            foreach (var reqKey in Requirements?.Keys ?? new())
-            {
-                if (!Speaker.ExperiencedConverastions.Contains(reqKey))
-                {
-                    return false;
-                }
-            }
-
-            foreach (var missingKey in Requirements?.MissingKeys ?? new())
-            {
-                if (Speaker.ExperiencedConverastions.Contains(missingKey))
-                {
-                    return false;
-                }
-            }
-            #endregion
-
-            #region Check if is extended conversation and player is already in an extended conversation
-            if (NextConversation != null && Speaker.NextConversation != null)
-            {
-                return false;
-            }
-            #endregion
+            //Check if is extended conversation and player is already in an extended conversation
+            if (NextConversation != null && Speaker.NextConversation != null) return false;
             
-            return true;
-        }
-
-        /// <summary>
-        /// Checks if the state is in the requirement list.
-        /// </summary>
-        /// <param name="reqList">The requirement list.</param>
-        /// <param name="stateString">The state of the world to check.</param>
-        /// <returns>True if the requirements is null or the state is in the list.</returns>
-        private static bool CheckInList(IEnumerable<string>? reqList, string stateString)
-        {
-            return reqList == null || !reqList.Any() || reqList.Contains(stateString.ToLower());
-        }
-
-        /// <summary>
-        /// Checks if the state is not in the requirement list.
-        /// </summary>
-        /// <param name="reqList">The requirement list.</param>
-        /// <param name="stateString">The state of the world to check.</param>
-        /// <returns>True if the requirements is not null and the state is not in the list.</returns>
-        private static bool CheckOutList(IEnumerable<string>? reqList, string stateString)
-        {
-            return !CheckInList(reqList, stateString);
-        }
-
-        /// <summary>
-        /// Check if the requirement string doesn't exist or matches the state string.
-        /// </summary>
-        /// <param name="requirementString">The requirement to be met.</param>
-        /// <param name="stateString">The string that represents game state.</param>
-        /// <returns>True if the requirement string is null or matches the state string.</returns>
-        private static bool CheckStringMatch(string? requirementString, string stateString)
-        {
-            return requirementString == null || requirementString.ToLower() == stateString.ToLower();
-        }
-
-        /// <summary>
-        /// Check if the requirement string doesn't exist or matches the state string.
-        /// </summary>
-        /// <param name="requirementString">The requirement to be met.</param>
-        /// <param name="stateString">The string that represents game state.</param>
-        /// <returns>True if the requirement string is not null and doesn't matches the state string.</returns>
-        private static bool CheckStringNoMatch(string? requirementString, string stateString)
-        {
-            return !(CheckStringMatch(requirementString, stateString));
-        }
-
-        /// <summary>
-        /// Checks if a value is within a string range.
-        /// </summary>
-        /// <param name="value">The value to check.</param>
-        /// <param name="reqRange">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
-        /// <returns>True if value is greater than or equal to the first number and less than or equal to the second number.</returns>
-        private static bool CheckInRange(string? reqRange, int value)
-        {
-            if (reqRange == null) return true;
-
-            var rangeArray = reqRange.Split('-', StringSplitOptions.RemoveEmptyEntries);
-            var min = int.Parse(rangeArray[0]);
-            var max = rangeArray.Length > 1 ? int.Parse(rangeArray[1]) : int.MaxValue;
-
-            return min <= value && value <= max;
-        }
-
-        /// <summary>
-        /// Checks if a value is outside of a string range.
-        /// </summary>
-        /// <param name="reqRange">The range to check with in the for of a single number or a range (e.g. "2", "2-4")</param>
-        /// <param name="value">The value to check.</param>
-        /// <returns>True if value is less than the first number and greater than the second number.</returns>
-        private static bool CheckOutRange(string? reqRange, int value)
-        {
-            return !CheckInRange(reqRange, value);
+            return Requirements?.AreMet(Speaker) ?? true;
         }
         #endregion
 

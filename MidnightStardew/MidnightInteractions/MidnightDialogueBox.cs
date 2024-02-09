@@ -17,7 +17,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// The Stardew NPC that should be displayed.
         /// </summary>
-        public NPC Speaker { get; set; }
+        public MidnightNpc Speaker { get; set; }
 
         /// <summary>
         /// Tracks if a dialogue has been set.
@@ -53,7 +53,7 @@ namespace MidnightStardew.MidnightInteractions
         /// </summary>
         /// <param name="speaker">The NPC that the player is speaking to.</param>
         /// <param name="conversation">The conversation that is being had.</param>
-        public MidnightDialogueBox(NPC speaker, MidnightConversation conversation) : base(100, 100, 100, 100)
+        public MidnightDialogueBox(MidnightNpc speaker, MidnightConversation conversation) : base(100, 100, 100, 100)
         {
             Speaker = speaker;
             Conversation = conversation;

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using MidnightStardew.MidnightInteractions;
+using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewHappyEndings;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Monsters;
 using System.Diagnostics;
 
 namespace MidnightStardew
@@ -231,7 +233,7 @@ namespace MidnightStardew
         }
         #endregion
 
-        #region Dialog
+        #region Conversations
         /// <summary>
         /// Checks if the NPC can talk to the Farmer.
         /// </summary>
@@ -248,12 +250,9 @@ namespace MidnightStardew
         {
             new MidnightDialogueBox(this, ChooseDialogue()).Display();
             StardewNpc.faceGeneralDirection(MidnightFarmer.LocalFarmer.Position);
-            //StardewNpc.controller = new StardewValley.Pathfinding.PathFindController(StardewNpc, StardewNpc.currentLocation, new Point(9, 6), 1);
-            //StardewNpc.performTenMinuteUpdate(500, StardewNpc.currentLocation);
-            //StardewNpc.controller.endBehaviorFunction = AfterPathing;
         }
 
-
+        #region Conversation Movement
         private MidnightConversation? AfterMoveConversation;
         /// <summary>
         /// Moves the NPC to the provided position.
@@ -316,6 +315,7 @@ namespace MidnightStardew
             
         }
         #endregion
+        #endregion
 
         #region Relationship
         /// <summary>
@@ -327,6 +327,48 @@ namespace MidnightStardew
         public int GetStatLevel(string targetId, string statName)
         {
             return Stats.ContainsKey(targetId) && Stats[targetId].ContainsKey(statName) ? Stats[targetId][statName] / 1000 : 0;
+        }
+
+        /// <summary>
+        /// Checks if the Midnight NPC meets a set of requirements.
+        /// </summary>
+        /// <param name="reqs">The requirements to meet.</param>
+        /// <returns>True if the Midnight NPC meets the requirements.</returns>
+        public bool MeetsRequirements(MidnightRequirements? reqs)
+        {
+            if (MidnightRequirements.CheckOutRange(reqs?.Hearts, Hearts)) return false;
+            foreach (var stat in reqs?.Stats ?? new())
+            {
+                var id = MidnightFarmer.LocalFarmer.UniqueMultiplayerID.ToString();
+                var npcStat = GetStatLevel(id, stat.Key);
+
+                if (MidnightRequirements.CheckOutRange(stat.Value, npcStat)) return false;
+            }
+            if (MidnightRequirements.CheckOutList(reqs?.RelationshipStatus, RelationshipStatus)) return false;
+
+            foreach (var reqKey in reqs?.Keys ?? new())
+            {
+                if (!ExperiencedConverastions.Contains(reqKey))
+                {
+                    return false;
+                }
+            }
+
+            foreach (var missingKey in reqs?.MissingKeys ?? new())
+            {
+                if (ExperiencedConverastions.Contains(missingKey))
+                {
+                    return false;
+                }
+            }
+
+            if (reqs?.Spot != null &&
+                !MidnightSpot.Get[reqs.Spot].IsIn(this))
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
 

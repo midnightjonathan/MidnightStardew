@@ -49,6 +49,7 @@ namespace MidnightStardew.MidnightInteractions
         /// The last index of the conversation, regardless of it being a question or not.
         /// </summary>
         public int LastIndex => Conversation.Statement.Count - 1;
+        public MidnightNpc Speaker { get; set; }
         private int statementIndex = 0;
         /// <summary>
         /// The index of the current statement.
@@ -59,10 +60,11 @@ namespace MidnightStardew.MidnightInteractions
             set => statementIndex = value;
         }
 
-        public MidnightDialogue(NPC speaker, MidnightConversation currentConversation, bool isQuestion = false) 
-            : base(speaker, default, "")
+        public MidnightDialogue(MidnightNpc speaker, MidnightConversation currentConversation, bool isQuestion = false) 
+            : base(speaker.StardewNpc, default, "")
         {
             Conversation = currentConversation;
+            Speaker = speaker;
 
             if (currentConversation.Statement == null) return;
 
@@ -92,13 +94,38 @@ namespace MidnightStardew.MidnightInteractions
         {
             var parsedStatment = statement.Replace("[Farmer]", MidnightFarmer.LocalFarmer.Name);
 
+            // Set speaker
+            int speakerIndex = parsedStatment.ToLower().IndexOf("[speaker ");
+            if (speakerIndex != -1)
+            {
+                int startSpeaker = speakerIndex + 9;
+                int endSpeaker = parsedStatment.IndexOf("]", startSpeaker);
+                var speaker = parsedStatment.Substring(startSpeaker, endSpeaker - startSpeaker);
+                StandardImageMap.TryGetValue(speaker, out string? outSpeaker);
+                if ("none" == (outSpeaker ?? speaker).ToLower())
+                {
+                    showPortrait = false;
+                    base.speaker = null;
+                } else if ("reset" == (outSpeaker ?? speaker).ToLower())
+                {
+                    base.speaker = Speaker;
+                    showPortrait = true;
+                }
+                else
+                {
+                    base.speaker = MidnightNpc.Get[outSpeaker ?? speaker];
+                    showPortrait = true;
+                }
+                parsedStatment = parsedStatment.Remove(speakerIndex, endSpeaker - speakerIndex + 1);
+            }
+
             // Set emotion
-            int emoteIndex = parsedStatment.IndexOf("[Image ");
+            int emoteIndex = parsedStatment.ToLower().IndexOf("[image ");
             if (emoteIndex != -1)
             {
                 int startEmote = emoteIndex + 7;
                 int endEmote = parsedStatment.IndexOf("]", startEmote);
-                var emote = parsedStatment.Substring(startEmote, endEmote - startEmote);
+                var emote = parsedStatment.Substring(startEmote, endEmote - startEmote).ToLower();
                 StandardImageMap.TryGetValue(emote, out string? outEmote);
                 CurrentEmotion = $"${outEmote ?? emote}";
                 parsedStatment = parsedStatment.Remove(emoteIndex, endEmote - emoteIndex + 1);
