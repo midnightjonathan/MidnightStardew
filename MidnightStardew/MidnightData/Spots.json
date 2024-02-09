@@ -32,5 +32,16 @@
             }
 
         ]
+    },
+    "DemetriusLab": {
+        "LocationName": "ScienceHouse",
+        "Rects": [
+            {
+                "x": 16,
+                "y": 17,
+                "width": 8,
+                "height": 7
+            }
+        ]
     }
 }

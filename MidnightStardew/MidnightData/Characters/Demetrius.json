@@ -3,16 +3,9 @@
     "Conversations": [
         {
             "Key": "Introduction",
-            "Reqs": {
-                "Other": {
-                    "Maru": {
-                        "RelationshipStatus": [ "Friendly" ]
-                    }
-                }
-            }
             "Statement": [
                 "Greetings! I'm Demetrius, local scientist and father. Thanks for introducing yourself!",
-                "I'm studying the local plants and animals from my home laboratory.", 
+                "I'm studying the local plants and animals from my home laboratory.",
                 "Have you met my daughter Maru? She's interested to meet you."
             ],
             "Effects": {
@@ -20,14 +13,724 @@
                     "Rapport": "50"
                 }
             }
-        },
+        }, // Introduction
         {
             "Statement": [
-                "Hi"
+                "Maru helps me out in the lab sometimes...",
+                "[Image happy]She's a great lab assistant.",
+                "[Image neutral]... and a good kid."
             ],
             "Effects": {
                 "Stats": {
                     "Rapport": "50"
+                }
+            }
+        }, // Maru lab assistant
+        {
+            "Requirements": {
+                "Others": {
+                    "Maru": {
+                        "RelationshipStatus": "Married"
+                    }
+                }
+            },
+            "Statement": [
+                "[Image sad]It's hard to do good science without Maru's help...",
+                "But her happiness is much more important than my experiment!",
+                "[Image neutral]...",
+                "If she wanted to come help though...",
+                "Well, I'd appreciate her help."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Maru Married, Maru lab assistant
+        {
+            "Statement": [
+                "This valley has a very vibrant and diverse ecosystem. That's one reason I was excited to move here.",
+                "So much of it is still undeveloped that we're in a bit of a refuge for wild life."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "We do have a vibrant and diverse ecosystem here, but it's missing a large top predator.",
+                    "Just not enough space to support a population.",
+                    "So humans do need to step in and fill some of that niche."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                }
+            }
+        }, // Diverse Ecosystem
+        {
+            "Statement": [
+                "You're probably growing a lot of interesting plants on your farm, huh?",
+                "Maybe I'll stop by your place some day and check it out.",
+                "I hope you're maintaining a healthy soil with a variety of crops!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Interesting crops
+        {
+            "Reqs": {
+                "Season": [ "Spring" ]
+            },
+            "Statement": [
+                "I can imagine it being pretty peaceful, working outdoors with plants all day.",
+                "How is the farming business going? It's parsnip season, isn't it?",
+                "How is the farming business going? It's parsnip season, isn't it?"
+            ],
+            "Responses": {
+                "It's going well": {
+                    "Statement": [
+                        "Good to hear! I hope your parsnips do well this year!"
+                    ]
+                },
+                "Just getting started": {
+                    "Reqs": {
+                        "Year": "1"
+                    },
+                    "Statement": [
+                        "I guess that's true.",
+                        "I'm sure you'll get it."
+                    ]
+                },
+                "Overwhelming": {
+                    "Statement": [
+                        "Sorry to hear that!",
+                        "Maybe you should look at getting some help."
+                    ]
+                },
+                "Prefer the mine": {
+                    "Statement": [
+                        "Looking for a little more excitement I guess!",
+                        "Well, the minerals out of there are useful for Maru's experiments.",
+                        "So I guess it's good someone enjoy it!"
+                    ]
+                },
+                "Prefer fishing": {
+                    "Statement": [
+                        "I suppose fishing lets you relax a little more."
+                    ]
+                }
+            },
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Parsnip season
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "1-3"
+                }
+            },
+            "Statement": [
+                "Robin has a hot temper. It's better to stay on her good side.",
+                "[Image happy]Don't tell her I said that."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Robin's hot temper
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "4-5"
+                }
+            },
+            "Statement": [
+                "Robin has a hot temper. It's better to stay on her good side.",
+                "[Image Unique]...now if I could only quantify her mood levels, perhaps I could model the fluctuations using a sinusoidal curve..."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Quantifying Robin's hot temper
+        {
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "6-7"
+                }
+            },
+            "Statement": [
+                "I don't know why Robin gets so mad all the time.",
+                "[Image Unique]...I create a hypothosis and try out a solution...",
+                "[Image Sad]Then when that ends in yet another...",
+                "Well, I just keep trying."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Hypothosis on Robin's hot temper
+        {
+            "Key": "How long do ou keep trying",
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "8"
+                }
+            },
+            "Statement": [
+                "I just don't understand what I'm doing wrong.",
+                "It's not like she's always angry, don't get me wrong.",
+                "What? Oh, sorry, Robin and I got into another fight last night.",
+                "I thought my most recent hypothosis was working...",
+                "I just...",
+                "How long do you keep trying?"
+            ],
+            "Responses": {
+                "Marriage is forever": {
+                    "Statement": [
+                        "I love Robin, but I know she's unhappy too.",
+                        "I don't want her to be unhappy.",
+                        "The only hypothosis that I have now is that there is something about me that makes her unhappy.",
+                        "Twenty years ago we thought we could make each other happy.",
+                        "[Image sad]Should we be unhappy forever because of one mistake?"
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-500"
+                        }
+                    }
+                },
+                "You try until you can't anymore.": {
+                    "Statement": [
+                        "While I suppose that's true...",
+                        "I can't create a set of rules based on that.",
+                        "*sighs*",
+                        "I want Robin to be happy, and I just don't know if I can do that."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "250"
+                        }
+                    },
+                    "NextConversation": {
+                        "Statement": [
+                            "Robin's a little further away every day.",
+                            "I love rules, simple and straight forward to follow.",
+                            "Right answers defined by experimentation.",
+                            "I don't think that will let me find a way to make her happy."
+                        ],
+                        "Effects": {
+                            "Stats": {
+                                "Rapport": "100"
+                            }
+                        }
+                    }
+                },
+                "Being unhappy isn't good for anyone.": {
+                    "Statement": [
+                        "Yes, Robin and I spend a lot of time unhappy.",
+                        "Well, 5 percent happy, 10 percent fighting, 15 percent unhappy, 30 percent neutral, and 40 percent apart.",
+                        "Only counting time awake... obviously...",
+                        "Sorry, when things get stressful I go to what makes sense to me, statistical analysis.",
+                        "I want Robin to be happy, I do..."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "250"
+                        }
+                    },
+                    "NextConversation": {
+                        "Statement": [
+                            "I've been thinking about our late conversation.",
+                            "Thanks for listening to me, by the way.",
+                            "I want Robin to be happy, I want to be happy.",
+                            "I've tried everything I can think of and none of the experiments have produced positive results.",
+                            "Maybe it is time to declare the experiment of our marriage a failure."
+                        ],
+                        "Stats": {
+                            "Rapport": "250"
+                        }
+                    }
+                },
+                "Give up at the first sign of trouble": {
+                    "Statement": [
+                        "[Image 2]You've never really cared for someone have you?",
+                        "Well, anyone but yourself.",
+                        "All relationships have trouble sometimes."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-1000"
+                        }
+                    }
+                }
+            }
+        }, // How long do you keep trying
+        {
+            "Statement": [
+                "Let's see... If compounds in the rhizosphere contain sufficient levels of Carbon-13, then...[Image Unique]",
+                "Oh! Sorry. I was pondering some data and I didn't notice you there.",
+                "I'm really concentrating on this, maybe we can talk later?"
+            ]
+        }, // Carbon-13 Distracted
+        {
+            "Statement": [
+                "It's good to take a break from work every now and then.",
+                "I guess that's kind of difficult when you live on a farm, though.",
+                "Hey, at least in the winter you don't have to worry about crops."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "I have a really hard time taking a break from my work.",
+                    "[Image happy]My work is every where here.",
+                    "Thats why I love living here.",
+                    "[Image sad]Though I think sometimes I get too caught up in it."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                }
+            }
+        }, // Good to take a break
+        {
+            "Statement": [
+                "Hi [Farmer]! How are you doing today?",
+                "Hi [Farmer]! How are you doing today?"
+            ],
+            "Responses": {
+                "Busy on the farm": {
+                    "Statement": [
+                        "I wish I could make your farming job easier somehow.",
+                        "Hopefully you're feeling productive though!"
+                    ]
+                },
+                "It's raining, always a great day for a farmer!": {
+                    "Reqs": {
+                        "Weather": "Rain"
+                    },
+                    "Statement": [
+                        "Most people don't like the rain.",
+                        "But I can see the advantage for a farmer!",
+                        "I think Sabastian likes the rain too..."
+                    ]
+                }
+            },
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // How are you today
+        {
+            "Reqs": {
+                "Season": [ "Summer" ]
+            },
+            "Statement": [
+                "[Speaker None]Demetrius is deep in thought.",
+                "Sorry, I'm really busy.",
+                "There's so many plants to study right now."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // So many plants to study
+        {
+            "Reqs": {
+                "Year": "1-1",
+                "Season": [ "Spring", "Summer", "Fall" ]
+            },
+            "Statement": [
+                "Make sure to water your plants every day.",
+                "Although, if you're using water retaining soil you don't need to worry about watering as often.",
+                "It's pretty convenient."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Water plants daily
+        {
+            "Reqs": {
+                "Year": "2",
+                "Season": [ "Spring", "Summer", "Fall" ]
+            },
+            "Statement": [
+                "Make sure to water your plants every day.",
+                "Although, if you're using water retaining soil you don't need to worry about watering as often.",
+                "It's pretty convenient.",
+                "...",
+                "I guess you already know that though."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Water plants daily, you know that
+        {
+            "Statement": [
+                "How's the farming business going? It's tomato season, isn't it?",
+                "I always get a wonderful sense of peace when I can work outside in nature."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Tomato season
+        {
+            "Key": "Maru Showed Telescope",
+            "Reqs": {
+                "Others": {
+                    "Maru": {
+                        "Keys": [ "Telescope" ]
+                    }
+                }
+            },
+            "Statement": [
+                "So I heard Maru had you look through that telescope out back.",
+                "How did you like it?"
+            ],
+            "Responses": {
+                "It was amazing! I saw a planet and then we looked at some stars.": {
+                    "Reqs": {
+                        "Others": {
+                            "Maru": {
+                                "Keys": [ "Telescope Beautiful Planet" ]
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "Maru loves space, and the mountain air here is pretty good for making observations.",
+                        "I wish I could build her a real observatory at up on the mountain tops."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "250"
+                        }
+                    }
+                },
+                "I looked into the big empty void of space": {
+                    "Reqs": {
+                        "Others": {
+                            "Maru": {
+                                "Keys": [ "Telescope Empty Void" ]
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "You know, the amazing thing about space is that even the emptiest looking part of the sky is filled with uncountable galaxies as far as our best telescopes can see.",
+                        "Seeing an empty void is more about your point of view than reality."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-100"
+                        }
+                    }
+                },
+                "An alright way to spend an evening": {
+                    "Statement": [
+                        "I can appreciate that, space isn't for everyone.",
+                        "I much prefer plants to space, but Maru loves space, so you better know a thing or two if you want to be close to her."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-50"
+                        }
+                    }
+                }
+            }
+        }, // Maru Showed Telescope
+        {
+            "Reqs": {
+                "Others": {
+                    "Maru": {
+                        "MissingKeys": [ "Telescope" ]
+                    }
+                }
+            },
+            "Statement": [
+
+                "If you and Maru become friends, I'm sure she'll show you how to use that telescope out back.",
+                "Pretty exciting, huh?"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Maru Telescope
+        {
+            "Reqs": {
+                "Others": {
+                    "Maru": {
+                        "RelationshipStatus": "Married"
+                    }
+                }
+            },
+            "Statement": [
+                "I enjoy Maru stopping by and using her telescope to keep up on her observations.",
+                "I'd really love to find funding for a real observatory in these mountains.",
+                "It's not a bad location for it as I understand it."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Maru Married, telescope observations
+        {
+            "Reqs": {
+                "Season": [ "Winter" ],
+                "Others": {
+                    "Maru": {
+                        "RelationshipStatus": "Married"
+                    }
+                }
+            },
+            "Statement": [
+                "I enjoy Maru stopping by and using her telescope to keep up on her observations.",
+                "The clear, cold, dry air really improves the images you can get through the telescope."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Maru Married, winter telescope observations
+        {
+            "Reqs": {
+                "Spot": "DemetriusLab"
+            },
+            "Statement": [
+                "[Image unique]Hmm... If strigolactone levels could be increased, would it have a proportional effect on mycorhizal growth?",
+                "Oh! Sorry. I was pondering some data and I didn't notice you there.",
+                "I'm a bit busy, maybe we can talk later?"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "10"
+                }
+            }
+        }, // Strigolactone Distracted
+        {
+            "Statement": [
+                "I became a scientist because I wanted to contribute to the progression of our species.",
+                "[Image happy]Of course, civilization would fall apart without farmers like yourself.",
+                "You make today possible, I seek to make tomorrow better."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Species progression
+        {
+            "Reqs": {
+                "Season": [ "Fall" ]
+            },
+            "Statement": [
+                "During this time of year I divert my attentions to fungi.",
+                "They're critical to many kinds of plants and its a great time to see them in action."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Fungal fall observations
+        {
+            "Key": "Extended Sea of Ignorance",
+            "Reqs": {
+                "Stats": {
+                    "Rapport": "3"
+                }
+            },
+            "Statement": [
+                "We know a lot about nature thanks to science.",
+                "But there's always a lot more to learn.",
+                "We live on an island surrounded by a sea of ignorance. As our island of knowledge grows, so does the shore of our ignorance.",
+                "I didn't come up with that, but I really like the quote."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            },
+            "NextConversation": {
+                "Statement": [
+                    "I was thinking about the quote I told you last time we spoke, the island surrounded by the sea of ignorance...",
+                    "The same can be said about this valley.",
+                    "It seems every time I think I've seen everything it has to offer something new comes up and lets me know there is just so much more to learn."
+                ],
+                "Effects": {
+                    "Stats": {
+                        "Rapport": "50"
+                    }
+                },
+                "NextConversation": {
+                    "Reqs": {
+                        "Others": {
+                            "Maru": {
+                                "Stats": {
+                                    "Rapport": "3"
+                                }
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "[Image happy]I really need to stop thinking about the island surrounded by a sea of ignorance!",
+                        "[Image neutral]It seems like this is true of our knowledge of the people around us as well.",
+                        "How much do I really know about Maru, she's my child, and I know her big life goals...",
+                        "[Image sad]At least I hope I do.",
+                        "...",
+                        "[Image neutral]I know she's very good at science and a great help in the lab, but who is she outside of science.",
+                        "[Image sad]You'd think her father would know that, wouldn't you."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "150"
+                        }
+                    }
+                }
+            }
+        }, // Extended Sea of Ignorance
+        {
+            "Statement": [
+                "We know a lot about nature thanks to science.",
+                "But there's always a lot more to learn.",
+                "We live on an island surrounded by a sea of ignorance. As our island of knowledge grows, so does the shore of our ignorance.",
+                "I didn't come up with that, but I really like the quote."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Sea of Ignorance
+        {
+            "Reqs": {
+                "Season": [ "Fall" ]
+            },
+            "Statement": [
+                "How's the farming business going? It's corn season, isn't it?",
+                "I love being outside in the fall, the weather is great and the leave are beautiful."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Corn season
+        {
+            "Reqs": {
+                "Location": "Mountain"
+            },
+            "Statement": [
+                "I'm taking a break from my research right now."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Research break
+        {
+            "Reqs": {
+                "Location": "Mountain",
+                "Stats": {
+                    "Rapport": "3"
+                }
+            },
+            "Statement": [
+                "I'm taking a break from my research right now.",
+                "Robin told me too...",
+                "But it's hard to think about anything other than my work some times."
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "100"
+                }
+            }
+        }, // Robin ordered a break
+        {
+            "Statement": [
+                "Talk to my wife if you want to increase the size of your house.",
+                "She can take on most any job!"
+            ],
+            "Effects": {
+                "Stats": {
+                    "Rapport": "50"
+                }
+            }
+        }, // Increase house size
+        {
+            "Reqs": {
+                "HouseMissing": "Kitchen"
+            },
+            "Statement": [
+                "Robin mentioned you haven't added a kitchen to your house yet.",
+                "Do you eat at the saloon a lot or do you just enjoy raw food?",
+                "Do you eat at the saloon a lot or do you just enjoy raw food?"
+            ],
+            "Responses": {
+                "I don't need to eat.": {
+                    "Statement": [
+                        "[Image unique]Umm... yeah I don't think thats true."
+                    ],
+                    "Effects": {
+                        "Stats": {
+                            "Rapport": "-100"
+                        }
+                    }
+                },
+                "At the saloon, I like supporting the local economy.": {
+                    "Statement": [
+                        "I do enjoy the occasional meal down there, but I can't imagine eating it everyday."
+                    ]
+                },
+                "Leah has convinced me to eat off the land!": {
+                    "Reqs": {
+                        "Others": {
+                            "Leah": {
+                                "Stats": {
+                                    "Rapport": "4"
+                                }
+                            }
+                        }
+                    },
+                    "Statement": [
+                        "[Image happy]Ha! I guess that makes life cheaper.",
+                        "Not sure about better though."
+                    ]
+                },
+                "Raw food is supposed to be better for you right?": {
+                    "Statement": [
+                        "Umm... my specialty is plants, not nutrition",
+                        "But we did evolve to eat cooked food, thats why our intestines are so short.",
+                        "Everything in moderation is likely good.",
+                        "If you really want to know I'd find some peer reviewed papers on the matter."
+                    ]
                 }
             }
         }
