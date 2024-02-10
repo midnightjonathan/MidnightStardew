@@ -197,14 +197,6 @@ namespace MidnightStardew
             }
 
             LoadNpc();
-            StardewNpc.DefaultPosition = new Vector2(3, 4);
-            foreach (var home in Game1.characterData[Name].Home)
-            {
-                if (home.Condition == null)
-                {
-                    home.Tile = new Point(3, 4);
-                }
-            }
         }
 
         /// <summary>
@@ -214,6 +206,8 @@ namespace MidnightStardew
         private void LoadNpc()
         {
             var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
+            
+            if (!Context.IsMainPlayer) return;
 
             var npcSave = eventMonitor.ModHelper.Data.ReadSaveData<MidnightNpcSave>($"{Name}.save");
             if ( npcSave != null )
@@ -432,6 +426,7 @@ namespace MidnightStardew
 
         protected void OnSaving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
         {
+            if (!Context.IsMainPlayer) return;
             var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
             var saveData = new MidnightNpcSave(this);
             eventMonitor.ModHelper.Data.WriteSaveData($"{Name}.save", saveData);
