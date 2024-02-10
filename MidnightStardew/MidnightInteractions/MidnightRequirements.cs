@@ -28,20 +28,24 @@ namespace MidnightStardew.MidnightInteractions
         public string? Time { get; set; }
         public string? Spot { get; set; }
 
+        public int? InDays { get; set; }
+        public int? OnDay { get; set; }
+
         [JsonConstructor]
-        public MidnightRequirements(Dictionary<string, string> stats, 
-                                            List<string> days, 
-                                            List<string> keys, 
-                                            List<string> missingKeys,
-                                            List<string> relationshipStatus,
-                                            List<string> season,
-                                            string spot,
-                                            string time,
-                                            string weather,
-                                            string year,
-                                            string hearts, 
-                                            string location,
-                                            Dictionary<string, MidnightRequirements> others)
+        public MidnightRequirements(Dictionary<string, string> stats,
+                                    Dictionary<string, MidnightRequirements> others, 
+                                    List<string> days, 
+                                    List<string> keys, 
+                                    List<string> missingKeys,
+                                    List<string> relationshipStatus,
+                                    List<string> season,
+                                    string spot,
+                                    string time,
+                                    string weather,
+                                    string year,
+                                    string hearts, 
+                                    string location,
+                                    int? inDays)
         {
             Stats = stats;
             Others = others;
@@ -58,6 +62,7 @@ namespace MidnightStardew.MidnightInteractions
             Hearts = hearts;
             Location = location?.ToLower();
             Weather = weather?.ToLower();
+            InDays = inDays;
         }
 
         public bool AreMet(MidnightNpc npc)
@@ -79,6 +84,10 @@ namespace MidnightStardew.MidnightInteractions
             {
                 return false;
             }
+            if (OnDay != null && OnDay != SDate.Now().DaysSinceStart)
+            {
+                return false;
+            }
             #endregion
 
             #region Check NPC Relationships
@@ -96,6 +105,14 @@ namespace MidnightStardew.MidnightInteractions
             #endregion
 
             return true;
+        }
+
+        /// <summary>
+        /// Used to set relative requirements
+        /// </summary>
+        public void FixRelativeReqs()
+        {
+            OnDay = InDays != null ? SDate.Now().AddDays((int)InDays).DaysSinceStart : null;
         }
 
         private static List<string>? ListToLower(List<string> listToLower)

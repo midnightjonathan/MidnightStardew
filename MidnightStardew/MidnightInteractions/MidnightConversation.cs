@@ -3,6 +3,7 @@ using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -190,7 +191,15 @@ namespace MidnightStardew.MidnightInteractions
             // Move Npc
             if (Move != null)
             {
-                Speaker.MoveTo(Move.LocationName, Move.Position, Move.AfterMoveConversation);
+                Move.Requirements.FixRelativeReqs();
+                if (Move.Requirements?.AreMet(Speaker) ?? true)
+                {
+                    Speaker.MoveTo(Move);
+                }
+                else
+                {
+                    Speaker.PlannedMovements.Add(Move);
+                }
             }
 
             // Give gift to farmer

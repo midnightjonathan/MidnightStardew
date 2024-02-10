@@ -9,9 +9,10 @@ namespace MidnightStardew.MidnightInteractions
         public string LocationName { get; set; }
         public Microsoft.Xna.Framework.Point Position { get; set; }
         public MidnightConversation AfterMoveConversation { get; set; }
+        public MidnightRequirements Requirements { get; set; }
 
         [JsonConstructor]
-        public MidnightMovement(string? spot, string? locationName, Microsoft.Xna.Framework.Point? position, MidnightConversation afterMove) 
+        public MidnightMovement(string? spot, string? locationName, Microsoft.Xna.Framework.Point? position, MidnightConversation afterMove, MidnightRequirements reqs) 
         { 
             if (spot != null)
             {
@@ -26,6 +27,7 @@ namespace MidnightStardew.MidnightInteractions
             }
 
             AfterMoveConversation = afterMove;
+            Requirements = reqs;
         }
     }
 }

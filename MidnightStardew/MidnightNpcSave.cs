@@ -21,6 +21,8 @@ namespace MidnightStardew
 
         public MidnightConversation? NextConversation { get; set; }
 
+        public List<MidnightMovement> PlannedMovements { get; set; }
+
         /// <summary>
         /// Indicates if the NPC has met the player.
         /// </summary>
@@ -38,6 +40,7 @@ namespace MidnightStardew
             ExperiencedConverastions = npc.ExperiencedConverastions;
             HasIntroduced = npc.HasIntroduced;
             NextConversation = npc.NextConversation;
+            PlannedMovements = npc.PlannedMovements;
         }
     }
 }

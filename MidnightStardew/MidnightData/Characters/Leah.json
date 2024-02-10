@@ -9,12 +9,14 @@
             "Effects": {
                 "Stats": {
                     "Rapport": "4000"
-                }
+                },
+                "ItemId": "122039872"
             },
             "Move": {
                 "Spot": "LeahBed",
-                "AfterMove": {
-                    "Statement": [ "I'm in bed now." ]
+                "Reqs": {
+                    "Time": "700-900",
+                    "InDays": 1
                 }
             }
         },

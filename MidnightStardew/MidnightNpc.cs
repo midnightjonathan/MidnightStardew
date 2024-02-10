@@ -4,6 +4,7 @@ using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewHappyEndings;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Monsters;
 using System.Diagnostics;
@@ -20,24 +21,6 @@ namespace MidnightStardew
         public static Dictionary<string, MidnightNpc> Get { get; } = new();
 
         protected Random dailyRandom = new();
-
-        /// <summary>
-        /// The underlying Stardew NPC that the MidnightNpc wraps.
-        /// </summary>
-        [JsonIgnore]
-        public NPC StardewNpc { get; private set; }
-
-        /// <summary>
-        /// The friendship the local farmer has with the Stardew NPC.
-        /// </summary>
-        [JsonIgnore]
-        public int Hearts
-        {
-            get
-            {
-                return MidnightFarmer.LocalFarmer.getFriendshipHeartLevelForNPC(Name);
-            }
-        }
 
         /// <summary>
         /// The friendship points that the Stardew NPC has with the local farmer.
@@ -58,6 +41,28 @@ namespace MidnightStardew
         }
 
         /// <summary>
+        /// The friendship the local farmer has with the Stardew NPC.
+        /// </summary>
+        [JsonIgnore]
+        public int Hearts
+        {
+            get
+            {
+                return MidnightFarmer.LocalFarmer.getFriendshipHeartLevelForNPC(Name);
+            }
+        }
+
+        /// <summary>
+        /// The name of the NPC.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// A set of date, times that the NPC will move to a new location.
+        /// </summary>
+        public List<MidnightMovement> PlannedMovements { get; set; } = new();
+
+        /// <summary>
         /// The descriptor of the location player's relationship with this NPC.
         /// Possible values: friendly, dating, engaged, married, divorced
         /// </summary>
@@ -71,9 +76,10 @@ namespace MidnightStardew
         }
 
         /// <summary>
-        /// The name of the NPC.
+        /// The underlying Stardew NPC that the MidnightNpc wraps.
         /// </summary>
-        public string Name { get; }
+        [JsonIgnore]
+        public NPC StardewNpc { get; private set; }
 
         #region Relationship Fields
         /// <summary>
@@ -182,6 +188,7 @@ namespace MidnightStardew
             eventMonitor.ModHelper.Events.Player.Warped += OnLocationChange;
             eventMonitor.ModHelper.Events.GameLoop.DayStarted += OnDayStart;
             eventMonitor.ModHelper.Events.GameLoop.Saving += OnSaving;
+            eventMonitor.ModHelper.Events.GameLoop.TimeChanged += OnTimeChange;
 
             //Setup the speaker for all of this NPCs conversations.
             foreach (var conversation in Conversations )
@@ -215,6 +222,7 @@ namespace MidnightStardew
                 ExperiencedConverastions = npcSave.ExperiencedConverastions;
                 hasIntroduced = npcSave.HasIntroduced;
                 nextConversation = npcSave.NextConversation;
+                PlannedMovements = npcSave.PlannedMovements;
             }
         }
 
@@ -261,11 +269,11 @@ namespace MidnightStardew
         /// <param name="locationName">The name of the location the NPC should move to.</param>
         /// <param name="position">The point to move the NPC to within the location.</param>
         /// <param name="afterPathing">The function to call once the NPC reaches the destintation.</param>
-        public void MoveTo(string locationName, Point position, MidnightConversation? afterMoveConveration = null)
+        public void MoveTo(MidnightMovement Move)
         {
-            AfterMoveConversation = afterMoveConveration;
-            var location = Game1._locationLookup[locationName];
-            StardewNpc.controller = new StardewValley.Pathfinding.PathFindController(StardewNpc, location, position, 1, StartAfterMoveConversation);
+            AfterMoveConversation = Move.AfterMoveConversation;
+            var location = Game1._locationLookup[Move.LocationName];
+            StardewNpc.controller = new StardewValley.Pathfinding.PathFindController(StardewNpc, location, Move.Position, 1, StartAfterMoveConversation);
         }
 
         public void StartAfterMoveConversation(Character character, GameLocation gameLocation)
@@ -390,7 +398,7 @@ namespace MidnightStardew
             return spriteArea.Contains(pos.X, pos.Y);
         }
 
-        private void OnButtonPressed(object? sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        protected void OnButtonPressed(object? sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
             if (e.Button == SButton.MouseRight && IsMouseOver() && StardewNpc.withinPlayerThreshold(1) && CanTalk())
             {
@@ -399,14 +407,14 @@ namespace MidnightStardew
             }
         }
 
-        private void OnDayStart(object? sender, StardewModdingAPI.Events.DayStartedEventArgs e)
+        protected void OnDayStart(object? sender, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
             Utility.CreateDaySaveRandom(StardewNpc.id);
             SpokenToLocations.Clear();
             HadExtendedConversationToday = false;
         }
 
-        private void OnLocationChange(object? sender, EventArgs e)
+        protected void OnLocationChange(object? sender, EventArgs e)
         {
             var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
 
@@ -422,7 +430,7 @@ namespace MidnightStardew
             }
         }
 
-        private void OnSaving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
+        protected void OnSaving(object? sender, StardewModdingAPI.Events.SavingEventArgs e)
         {
             var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
             var saveData = new MidnightNpcSave(this);
@@ -436,6 +444,19 @@ namespace MidnightStardew
                 Game1.isActionAtCurrentCursorTile = true;
                 Game1.isSpeechAtCurrentCursorTile = true;
                 Game1.mouseCursorTransparency = StardewNpc.withinPlayerThreshold(1) ? 1f : 0.5f;
+            }
+        }
+
+        protected void OnTimeChange(object? sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+        {
+            for (int i=0; i<PlannedMovements.Count; i++)
+            {
+                if (PlannedMovements[i].Requirements.AreMet(this))
+                {
+                    MoveTo(PlannedMovements[i]);
+                    PlannedMovements.RemoveAt(i);
+                    break;
+                }
             }
         }
         #endregion
