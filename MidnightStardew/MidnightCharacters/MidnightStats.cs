@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MidnightStardew
+namespace MidnightStardew.MidnightCharacters
 {
     public class MidnightStats : Dictionary<string, int>
     {
@@ -13,7 +13,7 @@ namespace MidnightStardew
         {
             get
             {
-                if (base.TryGetValue(key.ToLower(), out int value))
+                if (TryGetValue(key.ToLower(), out int value))
                 {
                     return value;
                 }

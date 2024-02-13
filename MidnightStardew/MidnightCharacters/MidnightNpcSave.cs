@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MidnightStardew
+namespace MidnightStardew.MidnightCharacters
 {
     public class MidnightNpcSave
     {        /// <summary>
-        /// Custom stats for your mod.
-        /// </summary>
+             /// Custom stats for your mod.
+             /// </summary>
         public Dictionary<string, MidnightStats> Stats { get; set; }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace MidnightStardew
         /// </summary>
         public bool HasIntroduced { get; set; }
 
-        public MidnightNpcSave() 
+        public MidnightNpcSave()
         {
             Stats ??= new();
             ExperiencedConverastions ??= new HashSet<string>();

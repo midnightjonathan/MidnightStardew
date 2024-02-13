@@ -1,4 +1,6 @@
 ﻿
+using MidnightStardew.MidnightCharacters;
+
 namespace MidnightStardew.MidnightWorld
 {
     public class MidnightSpot

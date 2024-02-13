@@ -1,6 +1,5 @@
 ﻿using StardewModdingAPI.Events;
 using StardewModdingAPI;
-using MidnightStardew;
 using StardewValley.Monsters;
 using StardewValley;
 using System;
@@ -10,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley.GameData.Objects;
 using Newtonsoft.Json;
 using MidnightStardew.MidnightItems;
+using MidnightStardew.MidnightCharacters;
 
 namespace StardewHappyEndings
 {

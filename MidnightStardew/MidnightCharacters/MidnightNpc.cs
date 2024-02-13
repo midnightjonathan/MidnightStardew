@@ -9,7 +9,7 @@ using StardewValley;
 using StardewValley.Monsters;
 using System.Diagnostics;
 
-namespace MidnightStardew
+namespace MidnightStardew.MidnightCharacters
 {
     [DebuggerDisplay("MidnightNpc: {Name}")]
     public class MidnightNpc
@@ -103,7 +103,7 @@ namespace MidnightStardew
         /// If filled out indicates that the NPC is in an extended conversation with the farmer.
         /// </summary>
         [JsonIgnore]
-        public MidnightConversation? NextConversation 
+        public MidnightConversation? NextConversation
         {
             get => nextConversation;
             set
@@ -113,7 +113,7 @@ namespace MidnightStardew
                     HadExtendedConversationToday = true;
                     nextConversation = value;
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace MidnightStardew
             eventMonitor.ModHelper.Events.GameLoop.TimeChanged += OnTimeChange;
 
             //Setup the speaker for all of this NPCs conversations.
-            foreach (var conversation in Conversations )
+            foreach (var conversation in Conversations)
             {
                 conversation.SetSpeaker(this);
             }
@@ -206,11 +206,11 @@ namespace MidnightStardew
         private void LoadNpc()
         {
             var eventMonitor = EventMonitor.Get ?? throw new ApplicationException("Event Monitor not set up.");
-            
+
             if (!Context.IsMainPlayer) return;
 
             var npcSave = eventMonitor.ModHelper.Data.ReadSaveData<MidnightNpcSave>($"{Name}.save");
-            if ( npcSave != null )
+            if (npcSave != null)
             {
                 Stats = npcSave.Stats;
                 ExperiencedConverastions = npcSave.ExperiencedConverastions;
@@ -299,7 +299,7 @@ namespace MidnightStardew
 
             List<MidnightConversation> available = new();
 
-            foreach (var conversation in  Conversations)
+            foreach (var conversation in Conversations)
             {
                 if (conversation.MeetsRequirements())
                 {
@@ -315,7 +315,7 @@ namespace MidnightStardew
             {
                 throw new ApplicationException("No available conversations.");
             }
-            
+
         }
         #endregion
         #endregion
@@ -444,7 +444,7 @@ namespace MidnightStardew
 
         protected void OnTimeChange(object? sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
         {
-            for (int i=0; i<PlannedMovements.Count; i++)
+            for (int i = 0; i < PlannedMovements.Count; i++)
             {
                 if (PlannedMovements[i].Requirements.AreMet(this))
                 {

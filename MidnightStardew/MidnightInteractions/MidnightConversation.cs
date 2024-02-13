@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using MidnightStardew.MidnightCharacters;
 using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewModdingAPI.Utilities;

@@ -1,4 +1,5 @@
-﻿using MidnightStardew.MidnightWorld;
+﻿using MidnightStardew.MidnightCharacters;
+using MidnightStardew.MidnightWorld;
 using Newtonsoft.Json;
 using StardewHappyEndings;
 using StardewModdingAPI;
