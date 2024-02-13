@@ -6,6 +6,10 @@ using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley.GameData.Objects;
+using Newtonsoft.Json;
+using MidnightStardew.MidnightItems;
 
 namespace StardewHappyEndings
 {
@@ -45,6 +49,7 @@ namespace StardewHappyEndings
 
         private void Content_AssetRequested(object? sender, AssetRequestedEventArgs e)
         {
+            // Override character dialogue
             if (e.Name.StartsWith("Characters/Dialogue/"))
             {
                 var split = e.Name.ToString()?.Split('/');
@@ -57,8 +62,31 @@ namespace StardewHappyEndings
                     }
                 }
             }
+
+            // Load custom items
+            if (e.NameWithoutLocale.IsEquivalentTo("Data/Objects"))
+            {
+                var itemsJson = Path.Combine(ModHelper.DirectoryPath, "MidnightData", "Items", "Items.json");
+                if (File.Exists(itemsJson))
+                {
+                    e.Edit((asset) =>
+                    {
+                        var editor = asset.AsDictionary<string, ObjectData>();
+                        foreach (var item in MidnightItem.Parse(itemsJson))
+                        {
+                            editor.Data[item.Key] = item.Value;
+                        }
+                    });
+                }
+            }
+
+            // Load custom item textures.
+            if (MidnightItem.TexturePaths.Contains(e.NameWithoutLocale.BaseName))
+            {
+                e.LoadFromModFile<Texture2D>(e.NameWithoutLocale.BaseName, AssetLoadPriority.Medium);
+            }
         }
 
-        private Dictionary<string, string> GetEmpty() => new();
+        protected Dictionary<string, string> GetEmpty() => new();
     }
 }

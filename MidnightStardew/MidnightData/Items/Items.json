@@ -1,0 +1,23 @@
+{
+    "100039": {
+        "Name": "Void Omelet",
+        "DisplayName": "Void Omelet",
+        "Description": "An omelet made with void eggs.",
+        "Type": "Cooking",
+        "CategoryName": "Cooking",
+        "Price": 10,
+        "Texture": "MidnightData/Items/MidnightItems.png",
+        "SpriteIndex": 1,
+        "Edibility": 50
+        //"IsDrink": false,
+        //"Buff": {},
+        //"GeodeDropDefaultItmes": false,
+        //"GeodeDrops": [],
+        //"ArtifactSpotChanges": {},
+        //"ExcludeFromFishingCollection": true,
+        //"ExcludeFromShippingCollection": true,
+        //"ExcludeFromRandomSale": true,
+        //"ContextTags": [],
+        //"CustomFields": {}
+    }
+}

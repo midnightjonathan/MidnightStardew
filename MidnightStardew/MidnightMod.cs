@@ -15,8 +15,6 @@ namespace MidnightStardew
         public delegate void GameLoadedDelegate(object sender, EventArgs e);
         public event GameLoadedDelegate? GameLoaded;
 
-        public virtual bool DoLoadMidnightCharacters { get; } = true;
-
         public static MidnightMod? Get { get; private set; }
 
         public MidnightMod() : base()
@@ -49,9 +47,9 @@ namespace MidnightStardew
 
         private void LoadMidnightNpcs()
         {
-            if (!DoLoadMidnightCharacters) return;
-
             var characterDir = Path.Combine(Helper.DirectoryPath, "MidnightData", "Characters");
+
+            if (!Directory.Exists(characterDir)) return;
 
             foreach (var characterFile in Directory.EnumerateFiles(characterDir))
             {

@@ -24,6 +24,12 @@
     <None Update="MidnightData\Characters\Robin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="MidnightData\Items\Items.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MidnightData\Items\MidnightItems.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="MidnightData\Spots.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
