@@ -38,16 +38,9 @@ namespace MidnightStardew
         /// <summary>
         /// Loads the Npcs when the game is loaded from a save.
         /// </summary>
-        protected virtual void LoadNpcs() { }
-
-        /// <summary>
-        /// Loads named spots within locations that can be used to check requirements.
-        /// </summary>
-        protected virtual void LoadSpots() { }
-
-        private void LoadMidnightNpcs()
+        protected virtual void LoadNpcs() 
         {
-            var characterDir = Path.Combine(Helper.DirectoryPath, "MidnightData", "Characters");
+            var characterDir = Path.Combine(Helper.DirectoryPath, "Data", "Characters");
 
             if (!Directory.Exists(characterDir)) return;
 
@@ -60,17 +53,17 @@ namespace MidnightStardew
         }
 
         /// <summary>
-        /// Loads built in Midnight Stardew spots.
+        /// Loads named spots within locations that can be used to check requirements.
         /// </summary>
-        /// <exception cref="ApplicationException">Thrown if the Spots.json is empty.</exception>
-        private void LoadMidnightSpots()
+        protected virtual void LoadSpots() 
         {
-            var spotFile = Path.Combine(Helper.DirectoryPath, "MidnightData", "Spots.json");
+            var spotFile = Path.Combine(Helper.DirectoryPath, "Data", "Spots.json");
+
+            if (!File.Exists(spotFile)) return;
 
             var spotJson = File.ReadAllText(spotFile);
             var spots = JsonConvert.DeserializeObject<Dictionary<string, MidnightSpot>>(spotJson) ?? throw new ApplicationException("No spots loaded.");
             MidnightSpot.Get = spots;
-            LoadSpots();
         }
 
         /// <summary>
@@ -84,12 +77,7 @@ namespace MidnightStardew
             { 
                 GameLoaded?.Invoke(this, e);
 
-                if (Helper.DirectoryPath.Split(Path.DirectorySeparatorChar)[^1] == "MidnightStardew")
-                {
-                    LoadMidnightSpots();
-                    LoadMidnightNpcs();
-                }
-                var t = Helper.DirectoryPath.Split(Path.DirectorySeparatorChar)[^1];
+                LoadSpots();
                 LoadNpcs();
             }
         }

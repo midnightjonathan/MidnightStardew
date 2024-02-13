@@ -6,7 +6,7 @@
         "Type": "Cooking",
         "CategoryName": "Cooking",
         "Price": 10,
-        "Texture": "MidnightData/Items/MidnightItems.png",
+        "Texture": "Data/Items/MidnightItems.png",
         "SpriteIndex": 1,
         "Edibility": 50
         //"IsDrink": false,

@@ -66,7 +66,7 @@ namespace StardewHappyEndings
             // Load custom items
             if (e.NameWithoutLocale.IsEquivalentTo("Data/Objects"))
             {
-                var itemsJson = Path.Combine(ModHelper.DirectoryPath, "MidnightData", "Items", "Items.json");
+                var itemsJson = Path.Combine(ModHelper.DirectoryPath, "Data", "Items", "Items.json");
                 if (File.Exists(itemsJson))
                 {
                     e.Edit((asset) =>

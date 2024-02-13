@@ -12,25 +12,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="MidnightData\Characters\Leah.json">
+    <None Update="Data\Characters\Leah.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Characters\Linus.json">
+    <None Update="Data\Characters\Linus.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Characters\Maru.json">
+    <None Update="Data\Characters\Maru.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Characters\Robin.json">
+    <None Update="Data\Characters\Robin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Items\Items.json">
+    <None Update="Data\Items\Items.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Items\MidnightItems.png">
+    <None Update="Data\Items\MidnightItems.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="MidnightData\Spots.json">
+    <None Update="Data\Spots.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
