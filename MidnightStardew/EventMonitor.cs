@@ -63,6 +63,28 @@ namespace StardewHappyEndings
                 }
             }
 
+            // Load custom sprites
+            if (e.NameWithoutLocale.StartsWith("Characters/"))
+            {
+                var split = e.NameWithoutLocale.ToString()?.Split('/');
+                if (split != null)
+                {
+                    var characterName = split[^1];
+                    if (MidnightNpc.Get.TryGetValue(characterName, out var character) && character.SpriteName != null)
+                    {
+                        var image = Path.Combine(ModHelper.DirectoryPath, "Data", "Characters", $"{characterName}{character.spriteName}.png");
+                        if (File.Exists(image))
+                        {
+                            e.Edit(asset =>
+                            {
+                                Texture2D ribbon = ModHelper.ModContent.Load<Texture2D>(image);
+                                asset.AsImage().PatchImage(source: ribbon, patchMode: PatchMode.Replace);
+                            });
+                        }
+                    }
+                }
+            }
+
             // Load custom items
             if (e.NameWithoutLocale.IsEquivalentTo("Data/Objects"))
             {

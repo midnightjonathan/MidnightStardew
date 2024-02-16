@@ -209,6 +209,19 @@ namespace MidnightStardew.MidnightInteractions
                 Item item = ItemRegistry.Create(Effects.ItemId);
                 MidnightFarmer.LocalFarmer.addItemByMenuIfNecessary(item);
             }
+
+            // Change NPC Sprite
+            if (Effects.Sprite != null)
+            {
+                if (Effects.Sprite.ToLower() == "reset")
+                {
+                    Speaker.SpriteName = null;
+                }
+                else
+                {
+                    Speaker.SpriteName = Effects.Sprite;
+                }
+            }
         }
     
         /// <summary>

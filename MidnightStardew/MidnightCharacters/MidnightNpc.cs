@@ -14,18 +14,58 @@ namespace MidnightStardew.MidnightCharacters
     [DebuggerDisplay("MidnightNpc: {Name}")]
     public class MidnightNpc
     {
+        #region Static Members
         /// <summary>
         /// A dictionary to get all of the MidnightNpcs in the game based on their name.
         /// </summary>
-        [JsonIgnore]
         public static Dictionary<string, MidnightNpc> Get { get; } = new();
+        #endregion
 
         protected Random dailyRandom = new();
 
         /// <summary>
+        /// The name of the NPC.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// A set of date, times that the NPC will move to a new location.
+        /// </summary>
+        public List<MidnightMovement> PlannedMovements { get; set; } = new();
+
+        public string? spriteName;
+        /// <summary>
+        /// The name of the sprite the the character should use, without the characters leading name.
+        /// </summary>
+        public string? SpriteName 
+        {
+            get => spriteName;
+            set
+            {
+                spriteName = value;
+                EventMonitor.Get?.ModHelper.GameContent.InvalidateCache($"Characters/{Name}");
+            }
+        }
+
+        /// <summary>
+        /// The underlying Stardew NPC that the MidnightNpc wraps.
+        /// </summary>
+        public NPC StardewNpc { get; private set; }
+
+        #region Relationship Fields
+        /// <summary>
+        /// List of all conversations the NPC has.
+        /// </summary>
+        public List<MidnightConversation> Conversations { get; set; }
+
+        /// <summary>
+        /// The set of all conversations the player has had with the NPC.
+        /// </summary>
+        public HashSet<string> ExperiencedConverastions { get; protected set; } = new();
+
+        /// <summary>
         /// The friendship points that the Stardew NPC has with the local farmer.
         /// </summary>
-        [JsonIgnore]
         public int FriendshipPoints
         {
             get
@@ -41,9 +81,37 @@ namespace MidnightStardew.MidnightCharacters
         }
 
         /// <summary>
+        /// Check if the player has had an extended conversation today.
+        /// </summary>
+        public bool HadExtendedConversationToday { get; set; } = false;
+
+        public Dictionary<string, bool> relationshipConversations = new()
+                                                                    {
+                                                                        ["stranger"] = false,
+                                                                        ["friendly"] = false,
+                                                                        ["dating"] = false,
+                                                                        ["married"] = false,
+                                                                        ["divorced"] =  false
+                                                                    };
+
+        /// <summary>
+        /// Returns true if the player has spoken to the NPC at least once.
+        /// </summary>
+        public bool HasIntroduced
+        {
+            get
+            {
+                if (!relationshipConversations["stranger"])
+                {
+                    relationshipConversations["stranger"] = ExperiencedConverastions.Contains($"introduction");
+                }
+                return relationshipConversations["stranger"];
+            }
+        }
+
+        /// <summary>
         /// The friendship the local farmer has with the Stardew NPC.
         /// </summary>
-        [JsonIgnore]
         public int Hearts
         {
             get
@@ -52,15 +120,22 @@ namespace MidnightStardew.MidnightCharacters
             }
         }
 
+        private MidnightConversation? nextConversation;
         /// <summary>
-        /// The name of the NPC.
+        /// If filled out indicates that the NPC is in an extended conversation with the farmer.
         /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// A set of date, times that the NPC will move to a new location.
-        /// </summary>
-        public List<MidnightMovement> PlannedMovements { get; set; } = new();
+        public MidnightConversation? NextConversation
+        {
+            get => nextConversation;
+            set
+            {
+                if (value != null)
+                {
+                    HadExtendedConversationToday = true;
+                    nextConversation = value;
+                }
+            }
+        }
 
         /// <summary>
         /// The descriptor of the location player's relationship with this NPC.
@@ -76,69 +151,14 @@ namespace MidnightStardew.MidnightCharacters
         }
 
         /// <summary>
-        /// The underlying Stardew NPC that the MidnightNpc wraps.
+        /// List of locations the player has spoken to the NPC today.
         /// </summary>
-        [JsonIgnore]
-        public NPC StardewNpc { get; private set; }
+        public List<GameLocation> SpokenToLocations { get; } = new();
 
-        #region Relationship Fields
         /// <summary>
         /// Custom stats for your mod.
         /// </summary>
         public Dictionary<string, MidnightStats> Stats { get; protected set; } = new();
-
-        /// <summary>
-        /// List of all conversations the NPC has.
-        /// </summary>
-        [JsonIgnore]
-        public List<MidnightConversation> Conversations { get; set; }
-
-        /// <summary>
-        /// Check if the player has had an extended conversation today.
-        /// </summary>
-        [JsonIgnore]
-        public bool HadExtendedConversationToday { get; set; } = false;
-        private MidnightConversation? nextConversation;
-        /// <summary>
-        /// If filled out indicates that the NPC is in an extended conversation with the farmer.
-        /// </summary>
-        [JsonIgnore]
-        public MidnightConversation? NextConversation
-        {
-            get => nextConversation;
-            set
-            {
-                if (value != null)
-                {
-                    HadExtendedConversationToday = true;
-                    nextConversation = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// List of locations the player has spoken to the NPC today.
-        /// </summary>
-        [JsonIgnore]
-        public List<GameLocation> SpokenToLocations { get; } = new();
-
-        /// <summary>
-        /// The set of all conversations the player has had with the NPC.
-        /// </summary>
-        public HashSet<string> ExperiencedConverastions { get; protected set; } = new();
-
-        private bool hasIntroduced = false;
-        public bool HasIntroduced
-        {
-            get
-            {
-                if (!hasIntroduced)
-                {
-                    hasIntroduced = ExperiencedConverastions.Contains($"introduction");
-                }
-                return hasIntroduced;
-            }
-        }
         #endregion
 
         /// <summary>
@@ -287,6 +307,11 @@ namespace MidnightStardew.MidnightCharacters
             if (!HasIntroduced && MidnightConversation.TryGetConversation(this, "introduction", out MidnightConversation? introConversation))
             {
                 return introConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
+            }
+
+            if (!relationshipConversations[RelationshipStatus] && MidnightConversation.TryGetConversation(this, RelationshipStatus, out MidnightConversation? relationshipConversation))
+            {
+                return relationshipConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
             }
 
             if (NextConversation != null && !HadExtendedConversationToday)

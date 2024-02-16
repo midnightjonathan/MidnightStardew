@@ -17,15 +17,17 @@ namespace MidnightStardew.MidnightInteractions
         /// The item key of the item to give to the player.
         /// </summary>
         public string? ItemId { get; set; }
+        public string? Sprite { get; set; }
         public Dictionary<string, string> Stats { get; set; }
 
         [JsonConstructor]
-        public MidnightDialogueEffects(string hearts, Dictionary<string, string> stats, int? emote, string itemId)
+        public MidnightDialogueEffects(string hearts, Dictionary<string, string> stats, int? emote, string itemId, string sprite)
         {
             Hearts = hearts;
             Stats = stats ?? new();
             Emote = emote ?? -1;
             ItemId = itemId;
+            Sprite = sprite;
         }
     }
 }
