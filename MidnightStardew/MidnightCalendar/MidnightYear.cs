@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MidnightStardew.MidnightCalendar
 {
-    internal class MidnightYear
+    public class MidnightYear
     {
     }
 }

@@ -26,19 +26,21 @@ namespace MidnightStardew.MidnightCharacters
         /// <summary>
         /// Indicates if the NPC has met the player.
         /// </summary>
-        public bool HasIntroduced { get; set; }
+        public Dictionary<string, bool> RelationshipConversations { get; set; }
 
         public MidnightNpcSave()
         {
             Stats ??= new();
-            ExperiencedConverastions ??= new HashSet<string>();
+            ExperiencedConverastions ??= new();
+            RelationshipConversations ??= new();
+            PlannedMovements ??= new();
         }
 
         public MidnightNpcSave(MidnightNpc npc)
         {
             Stats = npc.Stats;
             ExperiencedConverastions = npc.ExperiencedConverastions;
-            HasIntroduced = npc.HasIntroduced;
+            RelationshipConversations = npc.RelationshipConversations;
             NextConversation = npc.NextConversation;
             PlannedMovements = npc.PlannedMovements;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 namespace MidnightStardew.MidnightCalendar
 {
@@ -64,5 +64,8 @@ namespace MidnightStardew.MidnightCalendar
             }
             throw new ArgumentException($"Attempt to cast {seasonName} to a season failed.");
         }
+
+        public static explicit operator StardewValley.Season(MidnightSeason season) => (StardewValley.Season) season.arrayPosition;
+        public static implicit operator MidnightSeason(StardewValley.Season season) => Get[(int)season];
     }
 }

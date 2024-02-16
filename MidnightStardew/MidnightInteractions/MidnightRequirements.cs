@@ -30,6 +30,7 @@ namespace MidnightStardew.MidnightInteractions
         public string? Spot { get; set; }
 
         public int? InDays { get; set; }
+        public int? NoFestival { get; set; }
         public int? OnDay { get; set; }
 
         [JsonConstructor]
@@ -46,7 +47,8 @@ namespace MidnightStardew.MidnightInteractions
                                     string year,
                                     string hearts, 
                                     string location,
-                                    int? inDays)
+                                    int? inDays,
+                                    int? noFestival)
         {
             Stats = stats;
             Others = others;
@@ -64,6 +66,7 @@ namespace MidnightStardew.MidnightInteractions
             Location = location?.ToLower();
             Weather = weather?.ToLower();
             InDays = inDays;
+            NoFestival = noFestival;
         }
 
         public bool AreMet(MidnightNpc npc)
@@ -89,6 +92,19 @@ namespace MidnightStardew.MidnightInteractions
             {
                 return false;
             }
+            if (NoFestival != null)
+            {
+                var checkDate = MidnightCalendar.MidnightDay.Today;
+                for (int i=0; i<NoFestival;  i++)
+                {
+                    if (checkDate.IsFestivalDay())
+                    {
+                        return false;
+                    }
+                    checkDate.NextDay();
+                }
+            }
+            
             #endregion
 
             #region Check NPC Relationships

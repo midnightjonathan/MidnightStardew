@@ -85,14 +85,14 @@ namespace MidnightStardew.MidnightCharacters
         /// </summary>
         public bool HadExtendedConversationToday { get; set; } = false;
 
-        public Dictionary<string, bool> relationshipConversations = new()
-                                                                    {
-                                                                        ["stranger"] = false,
-                                                                        ["friendly"] = false,
-                                                                        ["dating"] = false,
-                                                                        ["married"] = false,
-                                                                        ["divorced"] =  false
-                                                                    };
+        public Dictionary<string, bool> RelationshipConversations { get; set; } = new()
+                                                                                  {
+                                                                                        ["stranger"] = false,
+                                                                                        ["friendly"] = false,
+                                                                                        ["dating"] = false,
+                                                                                        ["married"] = false,
+                                                                                        ["divorced"] =  false
+                                                                                  };
 
         /// <summary>
         /// Returns true if the player has spoken to the NPC at least once.
@@ -101,11 +101,11 @@ namespace MidnightStardew.MidnightCharacters
         {
             get
             {
-                if (!relationshipConversations["stranger"])
+                if (!RelationshipConversations["stranger"])
                 {
-                    relationshipConversations["stranger"] = ExperiencedConverastions.Contains($"introduction");
+                    RelationshipConversations["stranger"] = ExperiencedConverastions.Contains($"introduction");
                 }
-                return relationshipConversations["stranger"];
+                return RelationshipConversations["stranger"];
             }
         }
 
@@ -234,7 +234,7 @@ namespace MidnightStardew.MidnightCharacters
             {
                 Stats = npcSave.Stats;
                 ExperiencedConverastions = npcSave.ExperiencedConverastions;
-                hasIntroduced = npcSave.HasIntroduced;
+                RelationshipConversations = npcSave.RelationshipConversations;
                 nextConversation = npcSave.NextConversation;
                 PlannedMovements = npcSave.PlannedMovements;
             }
@@ -309,7 +309,7 @@ namespace MidnightStardew.MidnightCharacters
                 return introConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
             }
 
-            if (!relationshipConversations[RelationshipStatus] && MidnightConversation.TryGetConversation(this, RelationshipStatus, out MidnightConversation? relationshipConversation))
+            if (!RelationshipConversations[RelationshipStatus] && MidnightConversation.TryGetConversation(this, RelationshipStatus, out MidnightConversation? relationshipConversation))
             {
                 return relationshipConversation ?? throw new ApplicationException("Null conversation returned on true MidnightConversation.TryGetConversation");
             }
