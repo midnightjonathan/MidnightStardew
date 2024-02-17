@@ -50,7 +50,7 @@ namespace MidnightStardew.MidnightInteractions
         /// <summary>
         /// The effects to apply to the NPC as a result of this conversation.
         /// </summary>
-        public MidnightDialogueEffects Effects { get; set; }
+        public MidnightEffects Effects { get; set; }
         private string key;
         /// <summary>
         /// The identifier of the conversation.
@@ -111,7 +111,7 @@ namespace MidnightStardew.MidnightInteractions
         public MidnightConversation(MidnightRequirements reqs, 
                                     List<string> statement, 
                                     Dictionary<string, MidnightConversation> responses, 
-                                    MidnightDialogueEffects effects, 
+                                    MidnightEffects effects, 
                                     MidnightConversation nextConversation,
                                     MidnightMovement move,
                                     string key)

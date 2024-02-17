@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace MidnightStardew.MidnightInteractions
 {
-    [DebuggerDisplay("Midnight Dialogue Effects")]
-    public class MidnightDialogueEffects
+    [DebuggerDisplay("Midnight Effects")]
+    public class MidnightEffects
     {
         public int Emote { get; set; }  
         public string Hearts { get; set; }
@@ -21,7 +21,7 @@ namespace MidnightStardew.MidnightInteractions
         public Dictionary<string, string> Stats { get; set; }
 
         [JsonConstructor]
-        public MidnightDialogueEffects(string hearts, Dictionary<string, string> stats, int? emote, string itemId, string sprite)
+        public MidnightEffects(string hearts, Dictionary<string, string> stats, int? emote, string itemId, string sprite)
         {
             Hearts = hearts;
             Stats = stats ?? new();
